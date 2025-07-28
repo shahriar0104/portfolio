@@ -9,15 +9,16 @@ A modern, responsive portfolio website built with React, Vite, and Tailwind CSS.
 - **Smooth Animations**: Powered by Framer Motion for engaging user interactions
 - **Fast Performance**: Built with Vite for lightning-fast development and build times
 - **SEO Optimized**: Ready for deployment with proper meta tags and structure
+- **Auto Deployment**: Configured with gh-pages for automatic GitHub Pages deployment
 
 ## 🛠️ Tech Stack
 
 - **Frontend**: React 18
 - **Build Tool**: Vite
-- **Styling**: Tailwind CSS
+- **Styling**: Tailwind CSS v4
 - **Animations**: Framer Motion
 - **Icons**: Lucide React
-- **Deployment**: Ready for GitHub Pages, Vercel, or Netlify
+- **Deployment**: GitHub Pages with gh-pages
 
 ## 📋 Sections
 
@@ -39,7 +40,7 @@ A modern, responsive portfolio website built with React, Vite, and Tailwind CSS.
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/yourusername/portfolio.git
+git clone https://github.com/shahriar0104/portfolio.git
 cd portfolio
 ```
 
@@ -63,20 +64,81 @@ npm run build
 
 The built files will be in the `dist` folder, ready for deployment.
 
+## 🚀 Deployment
+
+### Quick Deployment with gh-pages
+
+The easiest way to deploy your portfolio:
+
+```bash
+# Deploy directly to GitHub Pages
+npm run deploy
+```
+
+Or use the enhanced deployment script:
+
+```bash
+# Using the deployment script (recommended)
+npm run deploy:script
+```
+
+Or use the bash script:
+
+```bash
+# Using the bash deployment script
+./deploy.sh
+```
+
+### Manual Deployment Steps
+
+1. **Build the project**:
+   ```bash
+   npm run build
+   ```
+
+2. **Deploy to GitHub Pages**:
+   ```bash
+   npm run deploy
+   ```
+
+3. **Your site will be live at**: https://shahriar0104.github.io/portfolio
+
+### Alternative Deployment Options
+
+#### GitHub Pages (Manual)
+1. Push your code to GitHub
+2. Go to repository Settings > Pages
+3. Select source branch and folder (dist)
+4. Your site will be available at `https://username.github.io/repository-name`
+
+#### Vercel
+1. Connect your GitHub repository to Vercel
+2. Vercel will automatically detect the Vite project
+3. Deploy with one click
+
+#### Netlify
+1. Connect your GitHub repository to Netlify
+2. Set build command: `npm run build`
+3. Set publish directory: `dist`
+4. Deploy
+
 ## 📁 Project Structure
 
 ```
 portfolio/
 ├── public/
+├── scripts/
+│   └── deploy.js          # Deployment script
 ├── src/
-│   ├── App.jsx          # Main application component
-│   ├── main.jsx         # Application entry point
-│   └── index.css        # Global styles with Tailwind
-├── index.html           # HTML template
-├── tailwind.config.js   # Tailwind CSS configuration
-├── postcss.config.js    # PostCSS configuration
-├── package.json         # Dependencies and scripts
-└── README.md           # Project documentation
+│   ├── App.jsx            # Main application component
+│   ├── main.jsx           # Application entry point
+│   └── index.css          # Global styles with Tailwind
+├── index.html             # HTML template
+├── tailwind.config.js     # Tailwind CSS configuration
+├── postcss.config.js      # PostCSS configuration
+├── package.json           # Dependencies and scripts
+├── deploy.sh              # Bash deployment script
+└── README.md              # Project documentation
 ```
 
 ## 🎨 Customization
@@ -102,24 +164,14 @@ The portfolio is fully responsive with breakpoints:
 - Tablet: 768px - 1024px
 - Desktop: > 1024px
 
-## 🚀 Deployment
+## 🔧 Available Scripts
 
-### GitHub Pages
-1. Push your code to GitHub
-2. Go to repository Settings > Pages
-3. Select source branch and folder
-4. Your site will be available at `https://username.github.io/repository-name`
-
-### Vercel
-1. Connect your GitHub repository to Vercel
-2. Vercel will automatically detect the Vite project
-3. Deploy with one click
-
-### Netlify
-1. Connect your GitHub repository to Netlify
-2. Set build command: `npm run build`
-3. Set publish directory: `dist`
-4. Deploy
+- `npm run dev` - Start development server
+- `npm run build` - Build for production
+- `npm run preview` - Preview production build
+- `npm run deploy` - Deploy to GitHub Pages
+- `npm run deploy:script` - Enhanced deployment with script
+- `./deploy.sh` - Bash deployment script
 
 ## 📄 License
 
