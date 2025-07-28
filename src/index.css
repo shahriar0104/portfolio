@@ -1,4 +1,10 @@
+@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@200;300;400;500;600;700;800;900&family=Space+Grotesque:wght@300;400;500;600;700&display=swap');
 @import "tailwindcss";
+
+:root {
+  --font-bricolage: 'Bricolage Grotesque', sans-serif;
+  --font-space: 'Space Grotesque', sans-serif;
+}
 
 @layer base {
   html {
@@ -6,11 +12,19 @@
   }
   
   body {
-    @apply bg-gray-50 text-gray-900 font-roboto-mono;
+    @apply bg-gray-50 text-gray-900;
   }
 }
 
 @layer components {
+  .font-bricolage {
+    font-family: var(--font-bricolage);
+  }
+  
+  .font-space {
+    font-family: var(--font-space);
+  }
+  
   .gradient-text {
     @apply bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent;
   }
@@ -21,22 +35,5 @@
   
   .section-padding {
     @apply py-16 px-4 sm:px-6 lg:px-8;
-  }
-
-  /* Font utility classes */
-  .font-header {
-    @apply font-bricolage font-bold;
-  }
-
-  .font-title {
-    @apply font-playfair font-semibold;
-  }
-
-  .font-body {
-    @apply font-roboto-mono;
-  }
-
-  .font-accent {
-    @apply font-space font-medium;
   }
 }

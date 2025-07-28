@@ -1,0 +1,32 @@
+<svg width="200" height="60" viewBox="0 0 200 60" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#3B82F6;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#8B5CF6;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="accentGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#10B981;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#3B82F6;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background shape -->
+  <rect x="2" y="2" width="56" height="56" rx="12" fill="url(#logoGradient)" stroke="#E5E7EB" stroke-width="2"/>
+  
+  <!-- Letter S -->
+  <path d="M12 18 Q12 12 18 12 L22 12 Q28 12 28 18 L28 22 Q28 28 22 28 L18 28 Q12 28 12 22 L12 18 Z" fill="white" opacity="0.9"/>
+  <path d="M12 32 Q12 26 18 26 L22 26 Q28 26 28 32 L28 36 Q28 42 22 42 L18 42 Q12 42 12 36 L12 32 Z" fill="white" opacity="0.9"/>
+  
+  <!-- Letter S accent -->
+  <circle cx="20" cy="20" r="2" fill="url(#accentGradient)"/>
+  <circle cx="20" cy="40" r="2" fill="url(#accentGradient)"/>
+  
+  <!-- Text using system fonts -->
+  <text x="70" y="25" font-family="Arial, sans-serif" font-size="18" font-weight="700" fill="#1F2937">Shadman</text>
+  <text x="70" y="45" font-family="Arial, sans-serif" font-size="14" font-weight="500" fill="#6B7280">Shahriar</text>
+  
+  <!-- Decorative elements -->
+  <circle cx="180" cy="15" r="3" fill="url(#logoGradient)" opacity="0.6"/>
+  <circle cx="185" cy="45" r="2" fill="url(#accentGradient)" opacity="0.6"/>
+  <circle cx="175" cy="35" r="1.5" fill="url(#logoGradient)" opacity="0.4"/>
+</svg>
