@@ -6,7 +6,7 @@
   }
   
   body {
-    @apply bg-gray-50 text-gray-900;
+    @apply bg-gray-50 text-gray-900 font-roboto-mono;
   }
 }
 
@@ -21,5 +21,22 @@
   
   .section-padding {
     @apply py-16 px-4 sm:px-6 lg:px-8;
+  }
+
+  /* Font utility classes */
+  .font-header {
+    @apply font-bricolage font-bold;
+  }
+
+  .font-title {
+    @apply font-playfair font-semibold;
+  }
+
+  .font-body {
+    @apply font-roboto-mono;
+  }
+
+  .font-accent {
+    @apply font-space font-medium;
   }
 }

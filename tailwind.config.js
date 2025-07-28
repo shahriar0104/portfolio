@@ -6,6 +6,12 @@ export default {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        'bricolage': ['Bricolage Grotesque', 'sans-serif'],
+        'space': ['Space Grotesque', 'sans-serif'],
+        'roboto-mono': ['Roboto Mono', 'monospace'],
+        'playfair': ['Playfair Display', 'serif'],
+      },
       animation: {
         'fade-in': 'fadeIn 0.5s ease-in-out',
         'slide-up': 'slideUp 0.5s ease-out',
