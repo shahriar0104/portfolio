@@ -36,6 +36,12 @@ import {
   Boxes,
   Network
 } from 'lucide-react'
+import CustomCursor from './components/CustomCursor'
+import ParticleBackground from './components/ParticleBackground'
+import CodeRain from './components/CodeRain'
+import ScrambleText from './components/ScrambleText'
+import TiltCard from './components/TiltCard'
+import { use3DTilt } from './hooks/use3DTilt'
 
 function App() {
   const [activeSection, setActiveSection] = useState('home')
@@ -97,7 +103,16 @@ function App() {
   const opacityProgress = useTransform(scrollYProgress, [0, 0.5], [1, 0])
 
   return (
-    <div className="min-h-screen relative overflow-x-hidden">
+    <div className="min-h-screen relative overflow-x-hidden" style={{ cursor: 'none' }}>
+      {/* Custom Cursor */}
+      <CustomCursor />
+      
+      {/* Interactive Particle Background */}
+      <ParticleBackground />
+      
+      {/* Code Rain Effect */}
+      <CodeRain density={0.3} />
+      
       {/* Animated Background Grid */}
       <div className="fixed inset-0 grid-background opacity-30 pointer-events-none" />
       
@@ -236,13 +251,15 @@ function App() {
 
               <h1 className="text-5xl md:text-7xl font-bold mb-6 font-bricolage leading-tight">
                 <span className="text-slate-200">Building</span>{' '}
-                <span className="gradient-text text-glow">Digital</span><br />
-                <span className="gradient-text-alt text-glow-purple">Ecosystems</span>
+                <ScrambleText text="Digital" className="gradient-text text-glow" /><br />
+                <ScrambleText text="Ecosystems" className="gradient-text-alt text-glow-purple" />
               </h1>
 
               <p className="text-lg md:text-xl text-slate-400 mb-8 max-w-2xl font-space leading-relaxed">
-                Full-stack engineer crafting scalable solutions and innovative experiences. 
-                Transforming complex problems into elegant code.
+                <ScrambleText 
+                  text="Full-stack engineer crafting scalable solutions and innovative experiences. Transforming complex problems into elegant code."
+                  speed={30}
+                />
               </p>
 
               <div className="flex flex-wrap gap-4 mb-8 justify-center lg:justify-start">
@@ -665,7 +682,8 @@ function App() {
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {/* IEIMS */}
             <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} viewport={{ once: true }} className="group">
-              <div className="glass-card-hover rounded-2xl overflow-hidden h-full flex flex-col">
+              <TiltCard className="h-full">
+                <div className="glass-card-hover rounded-2xl overflow-hidden h-full flex flex-col">
                 <div className="p-6 bg-gradient-to-br from-cyan-500/10 to-cyan-600/5 border-b border-cyan-500/20">
                   <div className="flex items-start justify-between mb-4">
                     <div className="w-12 h-12 rounded-xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center">
@@ -685,6 +703,7 @@ function App() {
                   </div>
                 </div>
               </div>
+              </TiltCard>
             </motion.div>
 
             {/* CRVS */}
