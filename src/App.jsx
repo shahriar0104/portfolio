@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react'
-import { motion } from 'framer-motion'
+import { useState, useEffect, useRef } from 'react'
+import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion'
 import { 
   Mail, 
   Phone, 
@@ -16,12 +16,62 @@ import {
   Zap,
   Shield,
   Building,
-  Target
+  Target,
+  Terminal,
+  Cpu,
+  Layers,
+  GitBranch,
+  Rocket,
+  Sparkles,
+  TrendingUp,
+  Users,
+  CheckCircle2,
+  ArrowRight,
+  ExternalLink,
+  Briefcase,
+  GraduationCap,
+  Trophy,
+  Activity,
+  Server,
+  Boxes,
+  Network
 } from 'lucide-react'
+import CustomCursor from './components/CustomCursor'
+import ParticleBackground from './components/ParticleBackground'
+import TiltCard from './components/TiltCard'
 
 function App() {
   const [activeSection, setActiveSection] = useState('home')
+  const [terminalText, setTerminalText] = useState('')
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
+  const [activeChapter, setActiveChapter] = useState('chapter-dsi')
+  const { scrollYProgress } = useScroll()
 
+  // Terminal typing effect
+  useEffect(() => {
+    const text = '> Shadman Shahriar - Full-stack Software Engineer\n> 5+ years shipping production systems\n> Optimized national CRVS from ~50s to <4s\n> Architected gov-scale education platform (IEIMS)\n> Scroll to explore the journey...'
+    let index = 0
+    const timer = setInterval(() => {
+      if (index < text.length) {
+        setTerminalText(text.substring(0, index + 1))
+        index++
+      } else {
+        clearInterval(timer)
+      }
+    }, 50)
+    return () => clearInterval(timer)
+  }, [])
+
+  // Mouse tracking for parallax effects
+  useEffect(() => {
+    const handleMouseMove = (e) => {
+      setMousePosition({ x: e.clientX, y: e.clientY })
+    }
+    window.addEventListener('mousemove', handleMouseMove)
+    return () => window.removeEventListener('mousemove', handleMouseMove)
+  }, [])
+
+  // Active section tracking
   useEffect(() => {
     const handleScroll = () => {
       const sections = ['home', 'about', 'experience', 'skills', 'projects', 'contact']
@@ -43,41 +93,122 @@ function App() {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
+  useEffect(() => {
+    const chapterIds = ['chapter-junior', 'chapter-dsi', 'chapter-outlier']
+
+    const handleChapterScroll = () => {
+      let closestId = null
+      let minDistance = Infinity
+      const viewportCenter = window.innerHeight / 2
+
+      for (const id of chapterIds) {
+        const element = document.getElementById(id)
+        if (element) {
+          const rect = element.getBoundingClientRect()
+          const distance = Math.abs(rect.top - viewportCenter)
+          if (distance < minDistance) {
+            minDistance = distance
+            closestId = id
+          }
+        }
+      }
+
+      if (closestId) {
+        setActiveChapter(closestId)
+      }
+    }
+
+    window.addEventListener('scroll', handleChapterScroll)
+    handleChapterScroll()
+    return () => window.removeEventListener('scroll', handleChapterScroll)
+  }, [])
+
   const scrollToSection = (sectionId) => {
     document.getElementById(sectionId)?.scrollIntoView({ behavior: 'smooth' })
   }
 
+  const scaleProgress = useTransform(scrollYProgress, [0, 1], [1, 0.8])
+  const opacityProgress = useTransform(scrollYProgress, [0, 0.5], [1, 0])
+
+  const journeyChapters = [
+    {
+      key: 'chapter-junior',
+      label: '2019 - 2021',
+      title: 'Junior Years',
+      subtitle: 'Frenclub Mobile · Angular & logistics',
+      targetId: 'chapter-junior',
+    },
+    {
+      key: 'chapter-dsi',
+      label: '2021 - Present',
+      title: 'Scaling Government Systems',
+      subtitle: 'Dynamic Solution Innovators · IEIMS, CRVS, RJSC',
+      targetId: 'chapter-dsi',
+    },
+    {
+      key: 'chapter-outlier',
+      label: '2025 - Present',
+      title: 'AI & LLM Work',
+      subtitle: 'Outlier AI · AI reviewer & frontend',
+      targetId: 'chapter-outlier',
+    },
+  ]
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
+    <div className="min-h-screen relative overflow-x-hidden">
+      {/* Custom Cursor */}
+      <CustomCursor />
+      
+      {/* Interactive Particle Background */}
+      <ParticleBackground />
+      
+      {/* Animated Background Grid */}
+      <div className="fixed inset-0 grid-background opacity-20 pointer-events-none" />
+      
+      {/* Scroll Progress Bar */}
+      <motion.div 
+        className="fixed top-0 left-0 right-0 h-1 bg-gradient-to-r from-cyan-400 via-purple-500 to-emerald-400 origin-left z-50"
+        style={{ scaleX: scrollYProgress }}
+      />
+
       {/* Navigation */}
-      <nav className="fixed top-0 w-full bg-white/90 backdrop-blur-xl z-50 border-b border-gray-200/50 shadow-sm">
+      <nav className="fixed top-0 w-full glass-card z-40 border-b border-cyan-500/20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <motion.div 
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
-              className="text-xl font-bold gradient-text font-bricolage"
+              className="flex items-center space-x-2"
             >
-              Shadman Shahriar
+              <Terminal className="w-6 h-6 text-cyan-400" />
+              <span className="text-xl font-bold gradient-text font-bricolage">Shadman Shahriar</span>
             </motion.div>
-            <div className="hidden md:flex space-x-8">
+            <div className="hidden md:flex space-x-1">
               {['home', 'about', 'experience', 'skills', 'projects', 'contact'].map((section) => (
                 <button
                   key={section}
                   onClick={() => scrollToSection(section)}
-                  className={`capitalize transition-all duration-300 font-medium font-space relative ${
+                  className={`capitalize transition-all duration-300 font-medium font-mono text-sm px-4 py-2 rounded-lg relative border ${
                     activeSection === section 
-                      ? 'text-blue-600' 
-                      : 'text-gray-600 hover:text-blue-600'
+                      ? 'text-cyan-200 bg-cyan-500/15 border-cyan-400/70 shadow-[0_0_16px_rgba(34,211,238,0.35)]' 
+                      : 'text-slate-400 border-transparent hover:text-cyan-300 hover:bg-cyan-400/5 hover:border-cyan-400/40'
                   }`}
                 >
-                  {section}
                   {activeSection === section && (
-                    <motion.div
-                      layoutId="activeTab"
-                      className="absolute -bottom-1 left-0 right-0 h-0.5 bg-blue-600 rounded-full"
-                    />
+                    <>
+                      <motion.div
+                        layoutId="activeTab"
+                        className="absolute inset-0 bg-cyan-400/10 rounded-lg"
+                        transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+                      />
+                      <motion.div
+                        layoutId="activeUnderline"
+                        className="absolute -bottom-1 left-4 right-4 h-0.5 rounded-full bg-cyan-400"
+                        transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+                      />
+                    </>
                   )}
+                  <span className="relative z-10">{section}</span>
                 </button>
               ))}
             </div>
@@ -85,528 +216,155 @@ function App() {
         </div>
       </nav>
 
-      {/* Hero Section */}
-      <section id="home" className="pt-20 pb-16 section-padding relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-blue-600/10 to-purple-600/10"></div>
-        <div className="max-w-7xl mx-auto relative z-10">
+      {/* Hero Section - System Boot */}
+      <section id="home" className="min-h-screen flex items-center justify-center section-padding relative overflow-hidden">
+        {/* Floating geometric shapes */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
           <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="text-center"
-          >
-            <motion.div
-              initial={{ scale: 0.8, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              transition={{ duration: 1, delay: 0.2 }}
-              className="inline-block mb-6"
-            >
-              <div className="w-24 h-24 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-6 shadow-2xl">
-                <Zap className="w-12 h-12 text-white" />
-              </div>
-            </motion.div>
-            <h1 className="text-6xl md:text-8xl font-bold mb-6 font-bricolage leading-tight">
-              Hi, I'm <span className="gradient-text">Shadman</span>
-            </h1>
-            <p className="text-xl md:text-2xl text-gray-600 mb-8 max-w-4xl mx-auto font-medium font-space">
-              Software Engineer passionate about building scalable applications and innovative solutions
-            </p>
-            <div className="flex flex-wrap justify-center gap-4 mb-12">
-              <motion.button
-                whileHover={{ scale: 1.05, y: -2 }}
-                whileTap={{ scale: 0.95 }}
-                className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-8 py-4 rounded-xl font-medium hover:shadow-xl transition-all duration-300 font-space shadow-lg"
-              >
-                <Download className="inline mr-2" size={20} />
-                Download Resume
-              </motion.button>
-              <motion.button
-                whileHover={{ scale: 1.05, y: -2 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={() => scrollToSection('contact')}
-                className="border-2 border-blue-600 text-blue-600 px-8 py-4 rounded-xl font-medium hover:bg-blue-600 hover:text-white transition-all duration-300 font-space hover:shadow-xl"
-              >
-                Get In Touch
-              </motion.button>
-            </div>
-            <div className="flex justify-center space-x-6">
-              {[
-                { icon: Mail, href: "mailto:swe.shadman@gmail.com", color: "hover:text-red-500" },
-                { icon: Phone, href: "tel:+8801965392623", color: "hover:text-green-500" },
-                { icon: Github, href: "https://github.com", color: "hover:text-gray-800" },
-                { icon: Linkedin, href: "https://linkedin.com", color: "hover:text-blue-600" }
-              ].map((social, index) => (
-                <motion.a
-                  key={index}
-                  whileHover={{ scale: 1.2, rotate: 5 }}
-                  href={social.href}
-                  target={social.href.startsWith('http') ? "_blank" : undefined}
-                  rel={social.href.startsWith('http') ? "noopener noreferrer" : undefined}
-                  className={`text-gray-600 transition-all duration-300 ${social.color}`}
-                >
-                  <social.icon size={28} />
-                </motion.a>
-              ))}
-            </div>
-          </motion.div>
+            className="absolute top-20 left-10 w-64 h-64 bg-cyan-500/5 rounded-full blur-3xl"
+            animate={{ 
+              scale: [1, 1.2, 1],
+              opacity: [0.3, 0.5, 0.3]
+            }}
+            transition={{ duration: 8, repeat: Infinity }}
+          />
+          <motion.div 
+            className="absolute bottom-20 right-10 w-96 h-96 bg-purple-500/5 rounded-full blur-3xl"
+            animate={{ 
+              scale: [1.2, 1, 1.2],
+              opacity: [0.5, 0.3, 0.5]
+            }}
+            transition={{ duration: 10, repeat: Infinity }}
+          />
         </div>
-      </section>
 
-      {/* About Section */}
-      <section id="about" className="section-padding bg-white/80 backdrop-blur-sm">
-        <div className="max-w-7xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            viewport={{ once: true }}
-            className="text-center mb-16"
-          >
-            <h2 className="text-5xl font-bold mb-6 font-bricolage">About Me</h2>
-            <p className="text-gray-600 max-w-4xl mx-auto font-space text-lg leading-relaxed">
-              Experienced Software Engineer with a passion for building scalable applications and innovative solutions. 
-              Currently working at Dynamic Solution Innovators, leading frontend development and system architecture.
-            </p>
-          </motion.div>
-          <div className="grid md:grid-cols-2 gap-12 items-center">
+        <div className="max-w-7xl mx-auto relative z-10 w-full">
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
+            {/* Left: Terminal Window */}
             <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
+              initial={{ opacity: 0, x: -50 }}
+              animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8 }}
-              viewport={{ once: true }}
+              className="order-2 lg:order-1"
             >
-              <div className="bg-gradient-to-br from-blue-600 via-purple-600 to-indigo-700 p-10 rounded-3xl text-white shadow-2xl">
-                <h3 className="text-3xl font-semibold mb-6 font-bricolage">Education</h3>
-                <div className="space-y-6">
-                  <div className="bg-white/10 p-6 rounded-2xl backdrop-blur-sm">
-                    <h4 className="font-semibold text-xl font-space">BSc in Computer Science and Engineering</h4>
-                    <p className="text-blue-100 font-space mt-2">Military Institute Of Science & Technology, Dhaka</p>
+              <div className="glass-card rounded-2xl overflow-hidden neon-border">
+                <div className="bg-slate-800/50 px-4 py-3 flex items-center space-x-2 border-b border-cyan-500/20">
+                  <div className="flex space-x-2">
+                    <div className="w-3 h-3 rounded-full bg-red-500/80"></div>
+                    <div className="w-3 h-3 rounded-full bg-yellow-500/80"></div>
+                    <div className="w-3 h-3 rounded-full bg-green-500/80"></div>
                   </div>
+                  <span className="text-slate-400 text-sm font-mono ml-4">terminal</span>
+                </div>
+                <div className="p-6 font-mono text-sm">
+                  <pre className="text-cyan-400 whitespace-pre-wrap">{terminalText}</pre>
+                  <motion.span 
+                    className="inline-block w-2 h-4 bg-cyan-400 ml-1"
+                    animate={{ opacity: [1, 0, 1] }}
+                    transition={{ duration: 1, repeat: Infinity }}
+                  />
                 </div>
               </div>
-            </motion.div>
-            <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8 }}
-              viewport={{ once: true }}
-              className="space-y-6"
-            >
-              {[
-                { title: "Current Role", content: "Software Engineer at Dynamic Solution Innovators", icon: Building, color: "from-green-500 to-emerald-600" },
-                { title: "Specialization", content: "Full-stack development, System Architecture, Performance Optimization", icon: Code, color: "from-purple-500 to-pink-600" },
-                { title: "Achievements", content: "2nd runner up AI Hackathon (RFP Copilot) - May 2025", icon: Award, color: "from-orange-500 to-red-600" }
-              ].map((item, index) => (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.8, delay: index * 0.1 }}
-                  viewport={{ once: true }}
-                  className={`bg-gradient-to-r ${item.color} p-6 rounded-2xl text-white shadow-lg`}
-                >
-                  <div className="flex items-center space-x-4">
-                    <div className="bg-white/20 p-3 rounded-xl">
-                      <item.icon className="w-6 h-6" />
-                    </div>
-                    <div>
-                      <h4 className="font-semibold text-lg font-space">{item.title}</h4>
-                      <p className="text-white/90 font-space mt-1">{item.content}</p>
-                    </div>
-                  </div>
-                </motion.div>
-              ))}
-            </motion.div>
-          </div>
-        </div>
-      </section>
 
-      {/* Experience Section */}
-      <section id="experience" className="section-padding">
-        <div className="max-w-7xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            viewport={{ once: true }}
-            className="text-center mb-16"
-          >
-            <h2 className="text-5xl font-bold mb-6 font-bricolage">Experience</h2>
-            <p className="text-gray-600 font-medium font-space text-lg">My professional journey in software development</p>
-          </motion.div>
-          
-          <div className="space-y-12">
-            {/* Current Role */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8 }}
-              viewport={{ once: true }}
-              className="bg-white/80 backdrop-blur-sm p-10 rounded-3xl shadow-xl card-hover border border-gray-200/50"
-            >
-              <div className="flex items-start justify-between mb-6">
-                <div>
-                  <h3 className="text-3xl font-semibold text-blue-600 font-bricolage">Software Engineer</h3>
-                  <p className="text-gray-600 font-medium font-space text-lg">Dynamic Solution Innovators</p>
-                </div>
-                <span className="bg-gradient-to-r from-green-500 to-emerald-600 text-white px-4 py-2 rounded-full text-sm font-medium font-space shadow-lg">
-                  Sep 2021 - Present
-                </span>
-              </div>
-              <ul className="space-y-3 text-gray-600 font-space text-lg">
-                <li className="flex items-start space-x-3">
-                  <div className="w-2 h-2 bg-blue-600 rounded-full mt-3 flex-shrink-0"></div>
-                  <span>Led the development and integration of a custom Component library</span>
-                </li>
-                <li className="flex items-start space-x-3">
-                  <div className="w-2 h-2 bg-blue-600 rounded-full mt-3 flex-shrink-0"></div>
-                  <span>Designed and executed critical data migration scripts with 100% accuracy</span>
-                </li>
-                <li className="flex items-start space-x-3">
-                  <div className="w-2 h-2 bg-blue-600 rounded-full mt-3 flex-shrink-0"></div>
-                  <span>Architected and delivered two full-featured modules end-to-end</span>
-                </li>
-                <li className="flex items-start space-x-3">
-                  <div className="w-2 h-2 bg-blue-600 rounded-full mt-3 flex-shrink-0"></div>
-                  <span>Optimized complex database queries, reducing response time by over 40%</span>
-                </li>
-                <li className="flex items-start space-x-3">
-                  <div className="w-2 h-2 bg-blue-600 rounded-full mt-3 flex-shrink-0"></div>
-                  <span>Built reusable component libraries in Next.js with Tailwind</span>
-                </li>
-                <li className="flex items-start space-x-3">
-                  <div className="w-2 h-2 bg-blue-600 rounded-full mt-3 flex-shrink-0"></div>
-                  <span>Improved CI/CD pipelines, reducing deployment time by 30%</span>
-                </li>
-                <li className="flex items-start space-x-3">
-                  <div className="w-2 h-2 bg-blue-600 rounded-full mt-3 flex-shrink-0"></div>
-                  <span>Took full ownership of CRVS Laravel system, reducing execution time from 50+ seconds to less than 4 seconds</span>
-                </li>
-                <li className="flex items-start space-x-3">
-                  <div className="w-2 h-2 bg-blue-600 rounded-full mt-3 flex-shrink-0"></div>
-                  <span>Mentored junior developers and promoted best coding practices</span>
-                </li>
-              </ul>
-            </motion.div>
-
-            {/* Reviewer Role */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.2 }}
-              viewport={{ once: true }}
-              className="bg-white/80 backdrop-blur-sm p-10 rounded-3xl shadow-xl card-hover border border-gray-200/50"
-            >
-              <div className="flex items-start justify-between mb-6">
-                <div>
-                  <h3 className="text-3xl font-semibold text-blue-600 font-bricolage">Reviewer</h3>
-                  <p className="text-gray-600 font-medium font-space text-lg">Outlier AI</p>
-                </div>
-                <span className="bg-gradient-to-r from-blue-500 to-cyan-600 text-white px-4 py-2 rounded-full text-sm font-medium font-space shadow-lg">
-                  Jun 2025 - Present
-                </span>
-              </div>
-              <p className="text-gray-600 font-space text-lg">
-                Started as a frontend contributor and, within 2 weeks, earned the opportunity to become a reviewer due to strong performance.
-              </p>
-            </motion.div>
-
-            {/* Previous Role */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.4 }}
-              viewport={{ once: true }}
-              className="bg-white/80 backdrop-blur-sm p-10 rounded-3xl shadow-xl card-hover border border-gray-200/50"
-            >
-              <div className="flex items-start justify-between mb-6">
-                <div>
-                  <h3 className="text-3xl font-semibold text-blue-600 font-bricolage">Junior Software Engineer</h3>
-                  <p className="text-gray-600 font-medium font-space text-lg">Frenclub Mobile</p>
-                </div>
-                <span className="bg-gradient-to-r from-gray-500 to-gray-700 text-white px-4 py-2 rounded-full text-sm font-medium font-space shadow-lg">
-                  Oct 2019 - Aug 2021
-                </span>
-              </div>
-              <ul className="space-y-3 text-gray-600 font-space text-lg">
-                <li className="flex items-start space-x-3">
-                  <div className="w-2 h-2 bg-blue-600 rounded-full mt-3 flex-shrink-0"></div>
-                  <span>Solely developed the web portal for the Daiden Logistics Tracking System using Angular 8</span>
-                </li>
-                <li className="flex items-start space-x-3">
-                  <div className="w-2 h-2 bg-blue-600 rounded-full mt-3 flex-shrink-0"></div>
-                  <span>Implemented responsive UI, integrating APIs, and ensuring smooth logistics management workflow</span>
-                </li>
-                <li className="flex items-start space-x-3">
-                  <div className="w-2 h-2 bg-blue-600 rounded-full mt-3 flex-shrink-0"></div>
-                  <span>Followed Angular best practices including modular architecture and reusable components</span>
-                </li>
-              </ul>
-            </motion.div>
-          </div>
-        </div>
-      </section>
-
-      {/* Skills Section */}
-      <section id="skills" className="section-padding bg-white/80 backdrop-blur-sm">
-        <div className="max-w-7xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            viewport={{ once: true }}
-            className="text-center mb-16"
-          >
-            <h2 className="text-5xl font-bold mb-6 font-bricolage">Technical Skills</h2>
-            <p className="text-gray-600 font-medium font-space text-lg">Technologies and tools I work with</p>
-          </motion.div>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {[
-              { icon: Code, title: "Languages", desc: "Javascript, Typescript, Java, Python, PHP, C++, C", color: "from-blue-500 to-blue-600" },
-              { icon: Globe, title: "Frontend", desc: "ReactJs, Material UI, Tailwind CSS, HTML canvas, three.js, shadCN/UI", color: "from-purple-500 to-purple-600" },
-              { icon: Database, title: "Backend", desc: "NextJs, Express, Payload, Spring Boot, FastAPI, Laravel", color: "from-green-500 to-green-600" },
-              { icon: Cloud, title: "Cloud & DB", desc: "MSSQL, PostgreSQL, Oracle, MongoDB, Firebase, Supabase", color: "from-orange-500 to-orange-600" }
-            ].map((skill, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: index * 0.1 }}
-                viewport={{ once: true }}
-                className={`bg-gradient-to-br ${skill.color} p-8 rounded-3xl text-white shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-2`}
-              >
-                <skill.icon className="w-14 h-14 mb-6" />
-                <h3 className="text-2xl font-semibold mb-4 font-bricolage">{skill.title}</h3>
-                <p className="text-white/90 font-space leading-relaxed">{skill.desc}</p>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Projects Section */}
-      <section id="projects" className="section-padding">
-        <div className="max-w-7xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            viewport={{ once: true }}
-            className="text-center mb-16"
-          >
-            <h2 className="text-5xl font-bold mb-6 font-bricolage">Featured Projects</h2>
-            <p className="text-gray-600 font-medium font-space text-lg">Some of my recent work</p>
-          </motion.div>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {/* IEIMS Project */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8 }}
-              viewport={{ once: true }}
-              className="bg-white/80 backdrop-blur-sm rounded-3xl shadow-xl overflow-hidden card-hover border border-gray-200/50"
-            >
-              <div className="bg-gradient-to-r from-blue-500 to-purple-600 p-8 text-white">
-                <h3 className="text-2xl font-semibold mb-3 font-bricolage">IEIMS</h3>
-                <p className="text-blue-100 font-medium font-space">Integrated Education Information Management System</p>
-              </div>
-              <div className="p-8">
-                <p className="text-gray-600 mb-6 font-space leading-relaxed">
-                  A large-scale education platform with seamless data migration, optimized performance, and high availability.
-                </p>
-                <div className="flex flex-wrap gap-2">
-                  {["NextJS", "Tailwind CSS", "Spring Boot", "MSSQL Server"].map((tech, index) => (
-                    <span key={index} className="bg-blue-100 text-blue-800 px-4 py-2 rounded-full text-sm font-medium font-space">
-                      {tech}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            </motion.div>
-
-            {/* CRVS Project */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.1 }}
-              viewport={{ once: true }}
-              className="bg-white/80 backdrop-blur-sm rounded-3xl shadow-xl overflow-hidden card-hover border border-gray-200/50"
-            >
-              <div className="bg-gradient-to-r from-green-500 to-teal-600 p-8 text-white">
-                <h3 className="text-2xl font-semibold mb-3 font-bricolage">CRVS</h3>
-                <p className="text-green-100 font-medium font-space">Civil Registration and Vital Statistics</p>
-              </div>
-              <div className="p-8">
-                <p className="text-gray-600 mb-6 font-space leading-relaxed">
-                  Enhanced a Laravel CRVS system for better performance, stability, and maintainability.
-                </p>
-                <div className="flex flex-wrap gap-2">
-                  {["Laravel", "Oracle", "JavaScript"].map((tech, index) => (
-                    <span key={index} className="bg-green-100 text-green-800 px-4 py-2 rounded-full text-sm font-medium font-space">
-                      {tech}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            </motion.div>
-
-            {/* RJSC Project */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.2 }}
-              viewport={{ once: true }}
-              className="bg-white/80 backdrop-blur-sm rounded-3xl shadow-xl overflow-hidden card-hover border border-gray-200/50"
-            >
-              <div className="bg-gradient-to-r from-indigo-500 to-blue-600 p-8 text-white">
-                <h3 className="text-2xl font-semibold mb-3 font-bricolage">RJSC</h3>
-                <p className="text-indigo-100 font-medium font-space">Registrar of Joint Stock Companies</p>
-              </div>
-              <div className="p-8">
-                <p className="text-gray-600 mb-6 font-space leading-relaxed">
-                  Maintained and enhanced the RJSC registration portal, ensuring smooth operations and improved reliability.
-                </p>
-                <div className="flex flex-wrap gap-2">
-                  {["Spring MVC", "Thymeleaf", "Oracle"].map((tech, index) => (
-                    <span key={index} className="bg-indigo-100 text-indigo-800 px-4 py-2 rounded-full text-sm font-medium font-space">
-                      {tech}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            </motion.div>
-
-            {/* Training Track Project */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.3 }}
-              viewport={{ once: true }}
-              className="bg-white/80 backdrop-blur-sm rounded-3xl shadow-xl overflow-hidden card-hover border border-gray-200/50"
-            >
-              <div className="bg-gradient-to-r from-red-500 to-pink-600 p-8 text-white">
-                <h3 className="text-2xl font-semibold mb-3 font-bricolage">Training Track</h3>
-                <p className="text-red-100 font-medium font-space">Army Training Activity System</p>
-              </div>
-              <div className="p-8">
-                <p className="text-gray-600 mb-6 font-space leading-relaxed">
-                  Developed a system to accurately track army training activities, including firing, grenade throwing, and formations.
-                </p>
-                <div className="flex flex-wrap gap-2">
-                  {["Next.js", "Express", "PostgreSQL", "Tailwind CSS"].map((tech, index) => (
-                    <span key={index} className="bg-red-100 text-red-800 px-4 py-2 rounded-full text-sm font-medium font-space">
-                      {tech}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            </motion.div>
-
-            {/* AI Assistant Project */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.4 }}
-              viewport={{ once: true }}
-              className="bg-white/80 backdrop-blur-sm rounded-3xl shadow-xl overflow-hidden card-hover border border-gray-200/50"
-            >
-              <div className="bg-gradient-to-r from-purple-500 to-pink-600 p-8 text-white">
-                <h3 className="text-2xl font-semibold mb-3 font-bricolage">AI Assistant</h3>
-                <p className="text-purple-100 font-medium font-space">Dedicated chatbot for organizational data</p>
-              </div>
-              <div className="p-8">
-                <p className="text-gray-600 mb-6 font-space leading-relaxed">
-                  Dedicated chatbot for public organizational data and non-confidential database info.
-                </p>
-                <div className="flex flex-wrap gap-2">
-                  {["FastAPI", "Langchain", "React", "PostgreSQL"].map((tech, index) => (
-                    <span key={index} className="bg-purple-100 text-purple-800 px-4 py-2 rounded-full text-sm font-medium font-space">
-                      {tech}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            </motion.div>
-          </div>
-        </div>
-      </section>
-
-      {/* Contact Section */}
-      <section id="contact" className="section-padding bg-white/80 backdrop-blur-sm">
-        <div className="max-w-7xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            viewport={{ once: true }}
-            className="text-center mb-16"
-          >
-            <h2 className="text-5xl font-bold mb-6 font-bricolage">Get In Touch</h2>
-            <p className="text-gray-600 font-medium font-space text-lg">Let's work together on your next project</p>
-          </motion.div>
-
-          <div className="grid md:grid-cols-2 gap-12">
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8 }}
-              viewport={{ once: true }}
-              className="space-y-8"
-            >
-              {[
-                { icon: Mail, title: "Email", content: "swe.shadman@gmail.com", color: "from-red-500 to-pink-600" },
-                { icon: Phone, title: "Phone", content: "+8801965392623", color: "from-green-500 to-emerald-600" },
-                { icon: MapPin, title: "Location", content: "Dhaka, Bangladesh", color: "from-blue-500 to-cyan-600" }
-              ].map((contact, index) => (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.8, delay: index * 0.1 }}
-                  viewport={{ once: true }}
-                  className={`bg-gradient-to-r ${contact.color} p-8 rounded-3xl text-white shadow-xl`}
-                >
-                  <div className="flex items-center space-x-6">
-                    <div className="bg-white/20 p-4 rounded-2xl">
-                      <contact.icon className="w-8 h-8" />
-                    </div>
-                    <div>
-                      <h3 className="font-semibold text-xl font-space">{contact.title}</h3>
-                      <p className="text-white/90 font-space text-lg mt-1">{contact.content}</p>
-                    </div>
-                  </div>
-                </motion.div>
-              ))}
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8 }}
-              viewport={{ once: true }}
-              className="bg-gradient-to-br from-gray-50 to-gray-100 p-10 rounded-3xl shadow-xl border border-gray-200/50"
-            >
-              <h3 className="text-3xl font-semibold mb-6 font-bricolage">Let's Connect</h3>
-              <p className="text-gray-600 mb-8 font-space text-lg leading-relaxed">
-                I'm always open to discussing new opportunities and interesting projects.
-              </p>
-              <div className="flex space-x-6">
+              {/* Stats Cards */}
+              <div className="grid grid-cols-3 gap-4 mt-6">
                 {[
-                  { icon: Github, href: "https://github.com", color: "bg-gray-800 hover:bg-gray-700" },
-                  { icon: Linkedin, href: "https://linkedin.com", color: "bg-blue-600 hover:bg-blue-700" },
-                  { icon: Mail, href: "mailto:swe.shadman@gmail.com", color: "bg-red-500 hover:bg-red-600" }
+                  { label: 'Years Exp', value: '5+', icon: TrendingUp },
+                  { label: 'Projects', value: '20+', icon: Rocket },
+                  { label: 'Tech Stack', value: '15+', icon: Cpu }
+                ].map((stat, index) => (
+                  <motion.div
+                    key={index}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.8 + index * 0.1 }}
+                    className="glass-card p-4 rounded-xl text-center hover:border-cyan-400/30 transition-all duration-300"
+                  >
+                    <stat.icon className="w-6 h-6 text-cyan-400 mx-auto mb-2" />
+                    <div className="text-2xl font-bold text-white font-bricolage">{stat.value}</div>
+                    <div className="text-xs text-slate-400 font-mono">{stat.label}</div>
+                  </motion.div>
+                ))}
+              </div>
+            </motion.div>
+
+            {/* Right: Main Content */}
+            <motion.div
+              initial={{ opacity: 0, x: 50 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+              className="order-1 lg:order-2 text-center lg:text-left"
+            >
+              <motion.div
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                transition={{ type: "spring", duration: 1, delay: 0.3 }}
+                className="inline-flex items-center space-x-2 bg-purple-500/10 border border-purple-500/30 rounded-full px-4 py-2 mb-6"
+              >
+                <Sparkles className="w-4 h-4 text-purple-400" />
+                <span className="text-purple-300 text-sm font-mono">Available for opportunities</span>
+              </motion.div>
+
+              <h1 className="text-5xl md:text-7xl font-bold mb-6 font-bricolage leading-tight">
+                <span className="text-slate-200">Full-stack</span>{' '}
+                <span className="gradient-text text-glow">Software Engineer</span><br />
+                <span className="gradient-text-alt text-glow-purple">Designing Digital Ecosystems</span>
+              </h1>
+              <div className="flex flex-wrap gap-2 mb-8 justify-center lg:justify-start">
+                {["Gov-scale systems", "Performance", "Cloud-native", "Mentor"].map((tag, i) => (
+                  <span
+                    key={i}
+                    className="px-3 py-1 rounded-full border border-cyan-500/40 bg-cyan-500/5 text-xs font-mono text-cyan-200"
+                  >
+                    {tag}
+                  </span>
+                ))}
+              </div>
+
+              <div className="flex flex-wrap gap-4 mb-8 justify-center lg:justify-start">
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="group relative px-8 py-4 bg-gradient-to-r from-cyan-500 to-purple-600 rounded-xl font-medium font-space overflow-hidden"
+                >
+                  <div className="absolute inset-0 bg-gradient-to-r from-purple-600 to-cyan-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  <span className="relative flex items-center space-x-2 text-white">
+                    <Download size={20} />
+                    <span>Download Resume</span>
+                  </span>
+                </motion.button>
+
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={() => scrollToSection('contact')}
+                  className="px-8 py-4 border-2 border-cyan-400/50 text-cyan-400 rounded-xl font-medium font-space hover:bg-cyan-400/10 transition-all duration-300 neon-border"
+                >
+                  <span className="flex items-center space-x-2">
+                    <ArrowRight size={20} />
+                    <span>Get In Touch</span>
+                  </span>
+                </motion.button>
+              </div>
+
+              {/* Social Links */}
+              <div className="flex space-x-4 justify-center lg:justify-start">
+                {[
+                  { icon: Mail, href: "mailto:swe.shadman@gmail.com", label: "Email" },
+                  { icon: Phone, href: "tel:+8801965392623", label: "Phone" },
+                  { icon: Github, href: "https://github.com", label: "GitHub" },
+                  { icon: Linkedin, href: "https://linkedin.com", label: "LinkedIn" }
                 ].map((social, index) => (
                   <motion.a
                     key={index}
-                    whileHover={{ scale: 1.1, rotate: 5 }}
+                    whileHover={{ scale: 1.1, y: -2 }}
                     href={social.href}
                     target={social.href.startsWith('http') ? "_blank" : undefined}
                     rel={social.href.startsWith('http') ? "noopener noreferrer" : undefined}
-                    className={`${social.color} text-white p-4 rounded-2xl transition-all duration-300 shadow-lg hover:shadow-xl`}
+                    className="w-12 h-12 rounded-lg glass-card flex items-center justify-center text-slate-400 hover:text-cyan-400 hover:border-cyan-400/30 transition-all duration-300 group"
+                    title={social.label}
                   >
-                    <social.icon size={28} />
+                    <social.icon size={20} className="group-hover:scale-110 transition-transform" />
                   </motion.a>
                 ))}
               </div>
@@ -615,10 +373,753 @@ function App() {
         </div>
       </section>
 
+      {/* About Section - Origin Story */}
+      <section id="about" className="section-padding relative">
+        <div className="max-w-7xl mx-auto">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            viewport={{ once: true }}
+            className="text-center mb-16"
+          >
+            <div className="inline-flex items-center space-x-2 bg-cyan-500/10 border border-cyan-500/30 rounded-full px-4 py-2 mb-4">
+              <Activity className="w-4 h-4 text-cyan-400" />
+              <span className="text-cyan-300 text-sm font-mono">Origin Story</span>
+            </div>
+            <h2 className="text-5xl md:text-6xl font-bold mb-6 font-bricolage">
+              <span className="gradient-text">The Journey</span>
+            </h2>
+            <p className="text-slate-400 max-w-3xl mx-auto font-space text-lg leading-relaxed">
+              From curious student to full-stack architect, building digital solutions that make a difference
+            </p>
+          </motion.div>
+
+          <div className="grid lg:grid-cols-3 gap-8 mb-12">
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+              viewport={{ once: true }}
+              className="glass-card-hover rounded-2xl p-8 group"
+            >
+              <div className="w-14 h-14 rounded-xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+                <GraduationCap className="w-7 h-7 text-cyan-400" />
+              </div>
+              <h3 className="text-xl font-bold text-white mb-2 font-bricolage">Education</h3>
+              <p className="text-lg text-slate-300 font-space mb-1">BSc in Computer Science and Engineering</p>
+              <p className="text-sm text-slate-500 font-mono">Military Institute Of Science & Technology</p>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.1 }}
+              viewport={{ once: true }}
+              className="glass-card-hover rounded-2xl p-8 group"
+            >
+              <div className="w-14 h-14 rounded-xl bg-purple-500/10 border border-purple-500/30 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+                <Briefcase className="w-7 h-7 text-purple-400" />
+              </div>
+              <h3 className="text-xl font-bold text-white mb-2 font-bricolage">Current Role</h3>
+              <p className="text-lg text-slate-300 font-space mb-1">Software Engineer</p>
+              <p className="text-sm text-slate-500 font-mono">Dynamic Solution Innovators</p>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              viewport={{ once: true }}
+              className="glass-card-hover rounded-2xl p-8 group"
+            >
+              <div className="w-14 h-14 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+                <Trophy className="w-7 h-7 text-emerald-400" />
+              </div>
+              <h3 className="text-xl font-bold text-white mb-2 font-bricolage">Achievement</h3>
+              <p className="text-lg text-slate-300 font-space mb-1">2nd Runner Up</p>
+              <p className="text-sm text-slate-500 font-mono">AI Hackathon (RFP Copilot) - May 2025</p>
+            </motion.div>
+          </div>
+
+          {/* Specializations */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            viewport={{ once: true }}
+            className="glass-card rounded-2xl p-8 md:p-12"
+          >
+            <h3 className="text-3xl font-bold text-white mb-8 font-bricolage flex items-center">
+              <Cpu className="w-8 h-8 text-purple-400 mr-3" />
+              Core Specializations
+            </h3>
+            <div className="grid md:grid-cols-2 gap-6">
+              {[
+                { icon: Code, title: "Full-Stack Development", desc: "Building end-to-end solutions with modern frameworks" },
+                { icon: Server, title: "System Architecture", desc: "Designing scalable and maintainable systems" },
+                { icon: Zap, title: "Performance Optimization", desc: "Reducing load times and improving efficiency" },
+                { icon: Network, title: "API Integration", desc: "Seamless third-party service connections" }
+              ].map((spec, index) => (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, x: -20 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.5, delay: index * 0.1 }}
+                  viewport={{ once: true }}
+                  className="flex items-start space-x-4 p-4 rounded-xl hover:bg-white/5 transition-colors duration-300"
+                >
+                  <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-cyan-500/20 to-purple-500/20 border border-cyan-500/30 flex items-center justify-center flex-shrink-0">
+                    <spec.icon className="w-5 h-5 text-cyan-400" />
+                  </div>
+                  <div>
+                    <h4 className="text-white font-semibold font-space mb-1">{spec.title}</h4>
+                    <p className="text-slate-400 text-sm font-mono">{spec.desc}</p>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Experience Section - Impact Timeline */}
+      <section id="experience" className="section-padding relative">
+        <div className="max-w-7xl mx-auto">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            viewport={{ once: true }}
+            className="text-center mb-16"
+          >
+            <div className="inline-flex items-center space-x-2 bg-purple-500/10 border border-purple-500/30 rounded-full px-4 py-2 mb-4">
+              <GitBranch className="w-4 h-4 text-purple-400" />
+              <span className="text-purple-300 text-sm font-mono">Impact Timeline</span>
+            </div>
+            <h2 className="text-5xl md:text-6xl font-bold mb-6 font-bricolage">
+              <span className="gradient-text-alt">Professional Journey</span>
+            </h2>
+            <p className="text-slate-400 font-medium font-space text-lg">Building impactful solutions across diverse domains</p>
+          </motion.div>
+          <div className="flex flex-wrap justify-center gap-4 mb-10">
+            {journeyChapters.map((chapter) => (
+              <button
+                key={chapter.key}
+                onClick={() => {
+                  setActiveChapter(chapter.targetId)
+                  document.getElementById(chapter.targetId)?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+                }}
+                className={`px-4 py-3 rounded-xl border text-left transition-all duration-300 ${
+                  activeChapter === chapter.targetId
+                    ? 'border-cyan-500/70 bg-cyan-500/10 text-cyan-200 shadow-[0_0_20px_rgba(34,211,238,0.35)]'
+                    : 'border-slate-700 bg-slate-900/40 text-slate-300 hover:border-cyan-500/40 hover:bg-slate-900/70'
+                }`}
+              >
+                <div className="text-xs font-mono text-slate-400">{chapter.label}</div>
+                <div className="text-sm font-semibold font-space">{chapter.title}</div>
+                <div className="text-xs font-mono text-slate-500">{chapter.subtitle}</div>
+              </button>
+            ))}
+          </div>
+          
+          <div className="relative">
+            {/* Timeline Line */}
+            <div className="absolute left-8 top-0 bottom-0 w-0.5 bg-gradient-to-b from-cyan-500 via-purple-500 to-emerald-500 opacity-30 hidden md:block" />
+
+            <div className="space-y-8">
+              {[
+                {
+                  id: 'chapter-dsi',
+                  title: "Software Engineer",
+                  company: "Dynamic Solution Innovators",
+                  period: "Sep 2021 - Present",
+                  status: "current",
+                  icon: Building,
+                  achievements: [
+                    "Led development of custom Component library",
+                    "Executed data migration scripts with 100% accuracy",
+                    "Architected two full-featured modules end-to-end",
+                    "Optimized database queries, reducing response time by 40%",
+                    "Built reusable component libraries in Next.js",
+                    "Improved CI/CD pipelines, reducing deployment time by 30%",
+                    "Optimized CRVS Laravel system from 50s to <4s execution time",
+                    "Mentored junior developers on best practices"
+                  ]
+                },
+                {
+                  id: 'chapter-outlier',
+                  title: "Reviewer",
+                  company: "Outlier AI",
+                  period: "Jun 2025 - Present",
+                  status: "current",
+                  icon: Shield,
+                  achievements: [
+                    "Promoted to reviewer within 2 weeks due to strong performance",
+                    "Started as frontend contributor"
+                  ]
+                },
+                {
+                  id: 'chapter-junior',
+                  title: "Junior Software Engineer",
+                  company: "Frenclub Mobile",
+                  period: "Oct 2019 - Aug 2021",
+                  status: "past",
+                  icon: Code,
+                  achievements: [
+                    "Solely developed Daiden Logistics Tracking System web portal using Angular 8",
+                    "Implemented responsive UI with seamless API integration",
+                    "Followed Angular best practices with modular architecture"
+                  ]
+                }
+              ].map((job, index) => (
+                <motion.div
+                  key={index}
+                  id={job.id}
+                  initial={{ opacity: 0, x: -30 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.6, delay: index * 0.1 }}
+                  viewport={{ once: true }}
+                  className="relative"
+                >
+                  <div className="flex items-start gap-6">
+                    {/* Timeline Node */}
+                    <div className="hidden md:flex flex-col items-center flex-shrink-0">
+                      <div className={`w-16 h-16 rounded-xl ${job.status === 'current' ? 'bg-gradient-to-br from-cyan-500 to-purple-600 neon-glow-cyan' : 'bg-slate-700/50 border border-slate-600'} flex items-center justify-center`}>
+                        <job.icon className="w-8 h-8 text-white" />
+                      </div>
+                    </div>
+
+                    {/* Content Card */}
+                    <div className="flex-1 glass-card-hover rounded-2xl p-8">
+                      <div className="flex flex-wrap items-start justify-between gap-4 mb-6">
+                        <div>
+                          <h3 className="text-2xl font-bold text-white font-bricolage mb-1">{job.title}</h3>
+                          <p className="text-cyan-400 font-space text-lg">{job.company}</p>
+                        </div>
+                        <span className={`px-4 py-2 rounded-lg text-sm font-mono ${job.status === 'current' ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' : 'bg-slate-700/50 text-slate-400 border border-slate-600'}`}>
+                          {job.period}
+                        </span>
+                      </div>
+
+                      <div className="space-y-3">
+                        {job.achievements.map((achievement, i) => (
+                          <motion.div
+                            key={i}
+                            initial={{ opacity: 0, x: -10 }}
+                            whileInView={{ opacity: 1, x: 0 }}
+                            transition={{ duration: 0.3, delay: index * 0.1 + i * 0.05 }}
+                            viewport={{ once: true }}
+                            className="flex items-start space-x-3 group"
+                          >
+                            <CheckCircle2 className="w-5 h-5 text-cyan-400 flex-shrink-0 mt-0.5 group-hover:scale-110 transition-transform" />
+                            <span className="text-slate-300 font-space">{achievement}</span>
+                          </motion.div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Skills Section - Tech Arsenal */}
+      <section id="skills" className="section-padding relative">
+        <div className="max-w-7xl mx-auto">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            viewport={{ once: true }}
+            className="text-center mb-16"
+          >
+            <div className="inline-flex items-center space-x-2 bg-emerald-500/10 border border-emerald-500/30 rounded-full px-4 py-2 mb-4">
+              <Boxes className="w-4 h-4 text-emerald-400" />
+              <span className="text-emerald-300 text-sm font-mono">Tech Arsenal</span>
+            </div>
+            <h2 className="text-5xl md:text-6xl font-bold mb-6 font-bricolage">
+              <span className="gradient-text">Technical Expertise</span>
+            </h2>
+            <p className="text-slate-400 font-medium font-space text-lg">Mastering modern technologies to build exceptional solutions</p>
+          </motion.div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {/* Languages */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.5 }}
+              viewport={{ once: true }}
+              className="group"
+            >
+              <div className="glass-card-hover rounded-2xl p-6 h-full bg-gradient-to-br from-cyan-500/20 to-blue-500/20">
+                <div className="w-14 h-14 rounded-xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center mb-6 group-hover:scale-110 group-hover:rotate-6 transition-all duration-300">
+                  <Code className="w-7 h-7 text-cyan-400" />
+                </div>
+                <h3 className="text-xl font-bold text-white mb-4 font-bricolage">Languages</h3>
+                <div className="flex flex-wrap gap-2">
+                  {["JavaScript", "TypeScript", "Java", "Python", "PHP", "C++"].map((skill, i) => (
+                    <span key={i} className="px-3 py-1 rounded-lg bg-cyan-500/10 border border-cyan-500/30 text-cyan-300 text-xs font-mono hover:bg-cyan-500/20 transition-colors duration-200">
+                      {skill}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </motion.div>
+
+            {/* Frontend */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.5, delay: 0.1 }}
+              viewport={{ once: true }}
+              className="group"
+            >
+              <div className="glass-card-hover rounded-2xl p-6 h-full bg-gradient-to-br from-purple-500/20 to-pink-500/20">
+                <div className="w-14 h-14 rounded-xl bg-purple-500/10 border border-purple-500/30 flex items-center justify-center mb-6 group-hover:scale-110 group-hover:rotate-6 transition-all duration-300">
+                  <Globe className="w-7 h-7 text-purple-400" />
+                </div>
+                <h3 className="text-xl font-bold text-white mb-4 font-bricolage">Frontend</h3>
+                <div className="flex flex-wrap gap-2">
+                  {["React", "Next.js", "Tailwind CSS", "Material UI", "Three.js", "shadCN/UI"].map((skill, i) => (
+                    <span key={i} className="px-3 py-1 rounded-lg bg-purple-500/10 border border-purple-500/30 text-purple-300 text-xs font-mono hover:bg-purple-500/20 transition-colors duration-200">
+                      {skill}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </motion.div>
+
+            {/* Backend */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+              viewport={{ once: true }}
+              className="group"
+            >
+              <div className="glass-card-hover rounded-2xl p-6 h-full bg-gradient-to-br from-emerald-500/20 to-green-500/20">
+                <div className="w-14 h-14 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center mb-6 group-hover:scale-110 group-hover:rotate-6 transition-all duration-300">
+                  <Server className="w-7 h-7 text-emerald-400" />
+                </div>
+                <h3 className="text-xl font-bold text-white mb-4 font-bricolage">Backend</h3>
+                <div className="flex flex-wrap gap-2">
+                  {["Express", "Spring Boot", "FastAPI", "Laravel", "Payload CMS", "Docker", "CI/CD pipelines"].map((skill, i) => (
+                    <span key={i} className="px-3 py-1 rounded-lg bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 text-xs font-mono hover:bg-emerald-500/20 transition-colors duration-200">
+                      {skill}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </motion.div>
+
+            {/* Database & Cloud */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.5, delay: 0.3 }}
+              viewport={{ once: true }}
+              className="group"
+            >
+              <div className="glass-card-hover rounded-2xl p-6 h-full bg-gradient-to-br from-amber-500/20 to-orange-500/20">
+                <div className="w-14 h-14 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center mb-6 group-hover:scale-110 group-hover:rotate-6 transition-all duration-300">
+                  <Database className="w-7 h-7 text-amber-400" />
+                </div>
+                <h3 className="text-xl font-bold text-white mb-4 font-bricolage">Database & Cloud</h3>
+                <div className="flex flex-wrap gap-2">
+                  {["PostgreSQL", "MongoDB", "MSSQL", "Oracle", "Firebase", "Supabase", "AWS (EC2, S3, Amplify)", "DynamoDB", "Wasabi", "Hostinger"].map((skill, i) => (
+                    <span key={i} className="px-3 py-1 rounded-lg bg-amber-500/10 border border-amber-500/30 text-amber-300 text-xs font-mono hover:bg-amber-500/20 transition-colors duration-200">
+                      {skill}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
+      {/* Projects Section - Digital Artifacts */}
+      <section id="projects" className="section-padding relative">
+        <div className="max-w-7xl mx-auto">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            viewport={{ once: true }}
+            className="text-center mb-16"
+          >
+            <div className="inline-flex items-center space-x-2 bg-cyan-500/10 border border-cyan-500/30 rounded-full px-4 py-2 mb-4">
+              <Layers className="w-4 h-4 text-cyan-400" />
+              <span className="text-cyan-300 text-sm font-mono">Digital Artifacts</span>
+            </div>
+            <h2 className="text-5xl md:text-6xl font-bold mb-6 font-bricolage">
+              <span className="gradient-text">Featured Projects</span>
+            </h2>
+            <p className="text-slate-400 font-medium font-space text-lg">Transforming ideas into impactful digital solutions</p>
+          </motion.div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {/* IEIMS */}
+            <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} viewport={{ once: true }} className="group">
+              <TiltCard className="h-full">
+                <div className="glass-card-hover rounded-2xl overflow-hidden h-full flex flex-col">
+                  <div className="p-6 bg-gradient-to-br from-cyan-500/10 to-cyan-600/5 border-b border-cyan-500/20">
+                    <div className="flex items-start justify-between mb-4">
+                      <div className="w-12 h-12 rounded-xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center">
+                        <GraduationCap className="w-6 h-6 text-cyan-400" />
+                      </div>
+                      <ExternalLink className="w-5 h-5 text-cyan-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                    </div>
+                    <h3 className="text-2xl font-bold text-white mb-1 font-bricolage">IEIMS</h3>
+                    <p className="text-cyan-300 text-xs font-mono uppercase tracking-wide">Integrated Education Information Management System</p>
+                  </div>
+                  <div className="p-6 flex-1 flex flex-col">
+                    <div className="space-y-3 flex-1">
+                      <div>
+                        <p className="text-[11px] font-mono uppercase tracking-wide text-cyan-300">Problem</p>
+                        <p className="text-slate-300 font-space text-sm leading-relaxed">
+                          Large-scale education data needed a unified web platform with reliable reporting and migration.
+                        </p>
+                      </div>
+                      <div>
+                        <p className="text-[11px] font-mono uppercase tracking-wide text-cyan-300">Role</p>
+                        <p className="text-slate-300 font-space text-sm leading-relaxed">
+                          Full-stack engineer implementing core modules, executing data migration scripts, and tuning performance.
+                        </p>
+                      </div>
+                      <div>
+                        <p className="text-[11px] font-mono uppercase tracking-wide text-cyan-300">Tech</p>
+                        <div className="flex flex-wrap gap-2 mt-1">
+                          {["Next.js", "Tailwind CSS", "Spring Boot", "MSSQL"].map((tech, i) => (
+                            <span key={i} className="px-3 py-1 rounded-lg bg-cyan-500/10 border border-cyan-500/30 text-cyan-300 text-xs font-mono">{tech}</span>
+                          ))}
+                        </div>
+                      </div>
+                      <div>
+                        <p className="text-[11px] font-mono uppercase tracking-wide text-cyan-300">Outcome</p>
+                        <p className="text-slate-300 font-space text-sm leading-relaxed">
+                          Delivered seamless data migration and improved performance for nationwide education workflows.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </TiltCard>
+            </motion.div>
+
+            {/* CRVS */}
+            <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.1 }} viewport={{ once: true }} className="group">
+              <div className="glass-card-hover rounded-2xl overflow-hidden h-full flex flex-col">
+                <div className="p-6 bg-gradient-to-br from-emerald-500/10 to-emerald-600/5 border-b border-emerald-500/20">
+                  <div className="flex items-start justify-between mb-4">
+                    <div className="w-12 h-12 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center">
+                      <Shield className="w-6 h-6 text-emerald-400" />
+                    </div>
+                    <ExternalLink className="w-5 h-5 text-emerald-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  </div>
+                  <h3 className="text-2xl font-bold text-white mb-1 font-bricolage">CRVS</h3>
+                  <p className="text-emerald-300 text-xs font-mono uppercase tracking-wide">Civil Registration and Vital Statistics</p>
+                </div>
+                <div className="p-6 flex-1 flex flex-col">
+                  <div className="space-y-3 flex-1">
+                    <div>
+                      <p className="text-[11px] font-mono uppercase tracking-wide text-emerald-300">Problem</p>
+                      <p className="text-slate-300 font-space text-sm leading-relaxed">
+                        Existing registration workflows suffered from slow execution times and maintainability issues.
+                      </p>
+                    </div>
+                    <div>
+                      <p className="text-[11px] font-mono uppercase tracking-wide text-emerald-300">Role</p>
+                      <p className="text-slate-300 font-space text-sm leading-relaxed">
+                        Backend-focused full-stack engineer enhancing the Laravel codebase and optimizing queries.
+                      </p>
+                    </div>
+                    <div>
+                      <p className="text-[11px] font-mono uppercase tracking-wide text-emerald-300">Tech</p>
+                      <div className="flex flex-wrap gap-2 mt-1">
+                        {["Laravel", "Oracle", "JavaScript"].map((tech, i) => (
+                          <span key={i} className="px-3 py-1 rounded-lg bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 text-xs font-mono">{tech}</span>
+                        ))}
+                      </div>
+                    </div>
+                    <div>
+                      <p className="text-[11px] font-mono uppercase tracking-wide text-emerald-300">Outcome</p>
+                      <p className="text-slate-300 font-space text-sm leading-relaxed">
+                        Improved performance, stability, and maintainability, including execution time optimizations.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+
+            {/* RJSC */}
+            <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.2 }} viewport={{ once: true }} className="group">
+              <div className="glass-card-hover rounded-2xl overflow-hidden h-full flex flex-col">
+                <div className="p-6 bg-gradient-to-br from-purple-500/10 to-purple-600/5 border-b border-purple-500/20">
+                  <div className="flex items-start justify-between mb-4">
+                    <div className="w-12 h-12 rounded-xl bg-purple-500/10 border border-purple-500/30 flex items-center justify-center">
+                      <Building className="w-6 h-6 text-purple-400" />
+                    </div>
+                    <ExternalLink className="w-5 h-5 text-purple-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  </div>
+                  <h3 className="text-2xl font-bold text-white mb-1 font-bricolage">RJSC</h3>
+                  <p className="text-purple-300 text-xs font-mono uppercase tracking-wide">Registrar of Joint Stock Companies</p>
+                </div>
+                <div className="p-6 flex-1 flex flex-col">
+                  <div className="space-y-3 flex-1">
+                    <div>
+                      <p className="text-[11px] font-mono uppercase tracking-wide text-purple-300">Problem</p>
+                      <p className="text-slate-300 font-space text-sm leading-relaxed">
+                        Critical business registration portal required ongoing maintenance and new features.
+                      </p>
+                    </div>
+                    <div>
+                      <p className="text-[11px] font-mono uppercase tracking-wide text-purple-300">Role</p>
+                      <p className="text-slate-300 font-space text-sm leading-relaxed">
+                        Full-stack engineer maintaining and enhancing the Spring MVC & Thymeleaf application.
+                      </p>
+                    </div>
+                    <div>
+                      <p className="text-[11px] font-mono uppercase tracking-wide text-purple-300">Tech</p>
+                      <div className="flex flex-wrap gap-2 mt-1">
+                        {["Spring MVC", "Thymeleaf", "Oracle"].map((tech, i) => (
+                          <span key={i} className="px-3 py-1 rounded-lg bg-purple-500/10 border border-purple-500/30 text-purple-300 text-xs font-mono">{tech}</span>
+                        ))}
+                      </div>
+                    </div>
+                    <div>
+                      <p className="text-[11px] font-mono uppercase tracking-wide text-purple-300">Outcome</p>
+                      <p className="text-slate-300 font-space text-sm leading-relaxed">
+                        Ensured smooth operations, reduced downtime, and improved reliability of core registration flows.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+
+            {/* Training Track */}
+            <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.3 }} viewport={{ once: true }} className="group">
+              <div className="glass-card-hover rounded-2xl overflow-hidden h-full flex flex-col">
+                <div className="p-6 bg-gradient-to-br from-amber-500/10 to-amber-600/5 border-b border-amber-500/20">
+                  <div className="flex items-start justify-between mb-4">
+                    <div className="w-12 h-12 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center">
+                      <Target className="w-6 h-6 text-amber-400" />
+                    </div>
+                    <ExternalLink className="w-5 h-5 text-amber-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  </div>
+                  <h3 className="text-2xl font-bold text-white mb-1 font-bricolage">Training Track</h3>
+                  <p className="text-amber-300 text-xs font-mono uppercase tracking-wide">Army Training Activity System</p>
+                </div>
+                <div className="p-6 flex-1 flex flex-col">
+                  <div className="space-y-3 flex-1">
+                    <div>
+                      <p className="text-[11px] font-mono uppercase tracking-wide text-amber-300">Problem</p>
+                      <p className="text-slate-300 font-space text-sm leading-relaxed">
+                        Paper-based or fragmented tracking made it hard to accurately monitor army training activities.
+                      </p>
+                    </div>
+                    <div>
+                      <p className="text-[11px] font-mono uppercase tracking-wide text-amber-300">Role</p>
+                      <p className="text-slate-300 font-space text-sm leading-relaxed">
+                        Full-stack engineer designing and building a web system for detailed training activity tracking.
+                      </p>
+                    </div>
+                    <div>
+                      <p className="text-[11px] font-mono uppercase tracking-wide text-amber-300">Tech</p>
+                      <div className="flex flex-wrap gap-2 mt-1">
+                        {["Next.js", "Express", "PostgreSQL", "Tailwind"].map((tech, i) => (
+                          <span key={i} className="px-3 py-1 rounded-lg bg-amber-500/10 border border-amber-500/30 text-amber-300 text-xs font-mono">{tech}</span>
+                        ))}
+                      </div>
+                    </div>
+                    <div>
+                      <p className="text-[11px] font-mono uppercase tracking-wide text-amber-300">Outcome</p>
+                      <p className="text-slate-300 font-space text-sm leading-relaxed">
+                        Delivered accurate, centralized visibility into training sessions like firing, grenade throwing, and formations.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+
+            {/* AI Assistant */}
+            <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.4 }} viewport={{ once: true }} className="group">
+              <div className="glass-card-hover rounded-2xl overflow-hidden h-full flex flex-col">
+                <div className="p-6 bg-gradient-to-br from-pink-500/10 to-pink-600/5 border-b border-pink-500/20">
+                  <div className="flex items-start justify-between mb-4">
+                    <div className="w-12 h-12 rounded-xl bg-pink-500/10 border border-pink-500/30 flex items-center justify-center">
+                      <Sparkles className="w-6 h-6 text-pink-400" />
+                    </div>
+                    <ExternalLink className="w-5 h-5 text-pink-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  </div>
+                  <h3 className="text-2xl font-bold text-white mb-1 font-bricolage">AI Assistant</h3>
+                  <p className="text-pink-300 text-xs font-mono uppercase tracking-wide">Organizational Data Chatbot</p>
+                </div>
+                <div className="p-6 flex-1 flex flex-col">
+                  <div className="space-y-3 flex-1">
+                    <div>
+                      <p className="text-[11px] font-mono uppercase tracking-wide text-pink-300">Problem</p>
+                      <p className="text-slate-300 font-space text-sm leading-relaxed">
+                        Teams needed a faster way to query public organizational data and non-confidential databases.
+                      </p>
+                    </div>
+                    <div>
+                      <p className="text-[11px] font-mono uppercase tracking-wide text-pink-300">Role</p>
+                      <p className="text-slate-300 font-space text-sm leading-relaxed">
+                        Full-stack engineer building the chatbot frontend and FastAPI backend with LLM integration.
+                      </p>
+                    </div>
+                    <div>
+                      <p className="text-[11px] font-mono uppercase tracking-wide text-pink-300">Tech</p>
+                      <div className="flex flex-wrap gap-2 mt-1">
+                        {["FastAPI", "Langchain", "React", "PostgreSQL"].map((tech, i) => (
+                          <span key={i} className="px-3 py-1 rounded-lg bg-pink-500/10 border border-pink-500/30 text-pink-300 text-xs font-mono">{tech}</span>
+                        ))}
+                      </div>
+                    </div>
+                    <div>
+                      <p className="text-[11px] font-mono uppercase tracking-wide text-pink-300">Outcome</p>
+                      <p className="text-slate-300 font-space text-sm leading-relaxed">
+                        Provided a dedicated assistant for quickly answering questions over organizational datasets.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
+      {/* Contact Section - Network Connection */}
+      <section id="contact" className="section-padding relative">
+        <div className="max-w-7xl mx-auto">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            viewport={{ once: true }}
+            className="text-center mb-16"
+          >
+            <div className="inline-flex items-center space-x-2 bg-purple-500/10 border border-purple-500/30 rounded-full px-4 py-2 mb-4">
+              <Network className="w-4 h-4 text-purple-400" />
+              <span className="text-purple-300 text-sm font-mono">Initialize Connection</span>
+            </div>
+            <h2 className="text-5xl md:text-6xl font-bold mb-6 font-bricolage">
+              <span className="gradient-text-alt">Let's Connect</span>
+            </h2>
+            <p className="text-slate-400 font-medium font-space text-lg">Ready to collaborate on your next project</p>
+          </motion.div>
+
+          <div className="grid lg:grid-cols-2 gap-8">
+            {/* Contact Info Cards */}
+            <div className="space-y-6">
+              <motion.a href="mailto:swe.shadman@gmail.com" initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }} transition={{ duration: 0.6 }} viewport={{ once: true }} className="block glass-card-hover rounded-2xl p-6 cursor-pointer">
+                <div className="flex items-center space-x-4">
+                  <div className="w-14 h-14 rounded-xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center">
+                    <Mail className="w-7 h-7 text-cyan-400" />
+                  </div>
+                  <div>
+                    <h3 className="text-slate-400 text-sm font-mono mb-1">Email</h3>
+                    <p className="text-white font-space text-lg">swe.shadman@gmail.com</p>
+                  </div>
+                </div>
+              </motion.a>
+
+              <motion.a href="tel:+8801965392623" initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }} transition={{ duration: 0.6, delay: 0.1 }} viewport={{ once: true }} className="block glass-card-hover rounded-2xl p-6 cursor-pointer">
+                <div className="flex items-center space-x-4">
+                  <div className="w-14 h-14 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center">
+                    <Phone className="w-7 h-7 text-emerald-400" />
+                  </div>
+                  <div>
+                    <h3 className="text-slate-400 text-sm font-mono mb-1">Phone</h3>
+                    <p className="text-white font-space text-lg">+8801965392623</p>
+                  </div>
+                </div>
+              </motion.a>
+
+              <motion.div initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }} transition={{ duration: 0.6, delay: 0.2 }} viewport={{ once: true }} className="block glass-card-hover rounded-2xl p-6">
+                <div className="flex items-center space-x-4">
+                  <div className="w-14 h-14 rounded-xl bg-purple-500/10 border border-purple-500/30 flex items-center justify-center">
+                    <MapPin className="w-7 h-7 text-purple-400" />
+                  </div>
+                  <div>
+                    <h3 className="text-slate-400 text-sm font-mono mb-1">Location</h3>
+                    <p className="text-white font-space text-lg">Dhaka, Bangladesh</p>
+                  </div>
+                </div>
+              </motion.div>
+            </div>
+
+            {/* Social Links & CTA */}
+            <motion.div
+              initial={{ opacity: 0, x: 30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8 }}
+              viewport={{ once: true }}
+              className="glass-card rounded-2xl p-8 lg:p-12 flex flex-col justify-center"
+            >
+              <h3 className="text-3xl font-bold text-white mb-4 font-bricolage">Ready to Build Something Amazing?</h3>
+              <p className="text-slate-400 mb-8 font-space leading-relaxed">
+                I'm always open to discussing new opportunities, innovative projects, and creative collaborations.
+              </p>
+
+              {/* Social Links */}
+              <div className="flex flex-wrap gap-4 mb-8">
+                <motion.a whileHover={{ scale: 1.05, y: -2 }} href="https://github.com" target="_blank" rel="noopener noreferrer" className="flex items-center space-x-2 px-6 py-3 rounded-xl bg-slate-500/10 border border-slate-500/30 text-slate-300 hover:bg-slate-500/20 transition-all duration-300">
+                  <Github size={20} />
+                  <span className="font-mono text-sm">GitHub</span>
+                </motion.a>
+                
+                <motion.a whileHover={{ scale: 1.05, y: -2 }} href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="flex items-center space-x-2 px-6 py-3 rounded-xl bg-cyan-500/10 border border-cyan-500/30 text-cyan-300 hover:bg-cyan-500/20 transition-all duration-300">
+                  <Linkedin size={20} />
+                  <span className="font-mono text-sm">LinkedIn</span>
+                </motion.a>
+                
+                <motion.a whileHover={{ scale: 1.05, y: -2 }} href="mailto:swe.shadman@gmail.com" className="flex items-center space-x-2 px-6 py-3 rounded-xl bg-purple-500/10 border border-purple-500/30 text-purple-300 hover:bg-purple-500/20 transition-all duration-300">
+                  <Mail size={20} />
+                  <span className="font-mono text-sm">Email</span>
+                </motion.a>
+              </div>
+
+              {/* Availability Status */}
+              <div className="flex items-center space-x-3 p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/30">
+                <div className="relative">
+                  <div className="w-3 h-3 bg-emerald-400 rounded-full"></div>
+                  <div className="absolute inset-0 w-3 h-3 bg-emerald-400 rounded-full animate-ping"></div>
+                </div>
+                <span className="text-emerald-300 font-mono text-sm">Available for opportunities</span>
+              </div>
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
       {/* Footer */}
-      <footer className="bg-gradient-to-r from-gray-900 to-gray-800 text-white py-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <p className="font-space text-lg">&copy; 2025 Shadman Shahriar. All rights reserved.</p>
+      <footer className="relative border-t border-cyan-500/20">
+        <div className="glass-card">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
+              <div className="flex items-center space-x-2">
+                <Terminal className="w-5 h-5 text-cyan-400" />
+                <span className="text-white font-bold font-bricolage">Shadman Shahriar</span>
+              </div>
+              <p className="text-slate-400 font-mono text-sm">
+                &copy; 2025 All rights reserved. Built with React & Tailwind CSS
+              </p>
+              <div className="flex items-center space-x-2">
+                <div className="w-2 h-2 bg-cyan-400 rounded-full pulse-glow"></div>
+                <span className="text-cyan-400 font-mono text-sm">System Online</span>
+              </div>
+            </div>
+          </div>
         </div>
       </footer>
     </div>
