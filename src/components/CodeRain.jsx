@@ -10,6 +10,11 @@ const CodeRain = ({ density = 0.5 }) => {
     const ctx = canvas.getContext('2d');
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
+    const prefersReducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    if (prefersReducedMotion) {
+      return;
+    }
 
     const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%^&*(){}[]<>/\\|';
     const fontSize = 14;
@@ -41,7 +46,14 @@ const CodeRain = ({ density = 0.5 }) => {
       });
     };
 
-    const interval = setInterval(draw, 50);
+    let animationFrameId;
+
+    const render = () => {
+      draw();
+      animationFrameId = requestAnimationFrame(render);
+    };
+
+    animationFrameId = requestAnimationFrame(render);
 
     const handleResize = () => {
       canvas.width = window.innerWidth;
@@ -51,7 +63,9 @@ const CodeRain = ({ density = 0.5 }) => {
     window.addEventListener('resize', handleResize);
 
     return () => {
-      clearInterval(interval);
+      if (animationFrameId) {
+        cancelAnimationFrame(animationFrameId);
+      }
       window.removeEventListener('resize', handleResize);
     };
   }, [density]);

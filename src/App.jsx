@@ -38,20 +38,18 @@ import {
 } from 'lucide-react'
 import CustomCursor from './components/CustomCursor'
 import ParticleBackground from './components/ParticleBackground'
-import CodeRain from './components/CodeRain'
-import ScrambleText from './components/ScrambleText'
 import TiltCard from './components/TiltCard'
-import { use3DTilt } from './hooks/use3DTilt'
 
 function App() {
   const [activeSection, setActiveSection] = useState('home')
   const [terminalText, setTerminalText] = useState('')
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
+  const [activeChapter, setActiveChapter] = useState('chapter-dsi')
   const { scrollYProgress } = useScroll()
 
   // Terminal typing effect
   useEffect(() => {
-    const text = '> Initializing portfolio.exe...\n> Loading developer profile...\n> System ready.'
+    const text = '> Shadman Shahriar - Full-stack Software Engineer\n> 5+ years shipping production systems\n> Optimized national CRVS from ~50s to <4s\n> Architected gov-scale education platform (IEIMS)\n> Scroll to explore the journey...'
     let index = 0
     const timer = setInterval(() => {
       if (index < text.length) {
@@ -95,6 +93,36 @@ function App() {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
+  useEffect(() => {
+    const chapterIds = ['chapter-junior', 'chapter-dsi', 'chapter-outlier']
+
+    const handleChapterScroll = () => {
+      let closestId = null
+      let minDistance = Infinity
+      const viewportCenter = window.innerHeight / 2
+
+      for (const id of chapterIds) {
+        const element = document.getElementById(id)
+        if (element) {
+          const rect = element.getBoundingClientRect()
+          const distance = Math.abs(rect.top - viewportCenter)
+          if (distance < minDistance) {
+            minDistance = distance
+            closestId = id
+          }
+        }
+      }
+
+      if (closestId) {
+        setActiveChapter(closestId)
+      }
+    }
+
+    window.addEventListener('scroll', handleChapterScroll)
+    handleChapterScroll()
+    return () => window.removeEventListener('scroll', handleChapterScroll)
+  }, [])
+
   const scrollToSection = (sectionId) => {
     document.getElementById(sectionId)?.scrollIntoView({ behavior: 'smooth' })
   }
@@ -102,19 +130,40 @@ function App() {
   const scaleProgress = useTransform(scrollYProgress, [0, 1], [1, 0.8])
   const opacityProgress = useTransform(scrollYProgress, [0, 0.5], [1, 0])
 
+  const journeyChapters = [
+    {
+      key: 'chapter-junior',
+      label: '2019 - 2021',
+      title: 'Junior Years',
+      subtitle: 'Frenclub Mobile · Angular & logistics',
+      targetId: 'chapter-junior',
+    },
+    {
+      key: 'chapter-dsi',
+      label: '2021 - Present',
+      title: 'Scaling Government Systems',
+      subtitle: 'Dynamic Solution Innovators · IEIMS, CRVS, RJSC',
+      targetId: 'chapter-dsi',
+    },
+    {
+      key: 'chapter-outlier',
+      label: '2025 - Present',
+      title: 'AI & LLM Work',
+      subtitle: 'Outlier AI · AI reviewer & frontend',
+      targetId: 'chapter-outlier',
+    },
+  ]
+
   return (
-    <div className="min-h-screen relative overflow-x-hidden" style={{ cursor: 'none' }}>
+    <div className="min-h-screen relative overflow-x-hidden">
       {/* Custom Cursor */}
       <CustomCursor />
       
       {/* Interactive Particle Background */}
       <ParticleBackground />
       
-      {/* Code Rain Effect */}
-      <CodeRain density={0.3} />
-      
       {/* Animated Background Grid */}
-      <div className="fixed inset-0 grid-background opacity-30 pointer-events-none" />
+      <div className="fixed inset-0 grid-background opacity-20 pointer-events-none" />
       
       {/* Scroll Progress Bar */}
       <motion.div 
@@ -139,18 +188,25 @@ function App() {
                 <button
                   key={section}
                   onClick={() => scrollToSection(section)}
-                  className={`capitalize transition-all duration-300 font-medium font-mono text-sm px-4 py-2 rounded-lg relative ${
+                  className={`capitalize transition-all duration-300 font-medium font-mono text-sm px-4 py-2 rounded-lg relative border ${
                     activeSection === section 
-                      ? 'text-cyan-400 bg-cyan-400/10' 
-                      : 'text-slate-400 hover:text-cyan-400 hover:bg-cyan-400/5'
+                      ? 'text-cyan-200 bg-cyan-500/15 border-cyan-400/70 shadow-[0_0_16px_rgba(34,211,238,0.35)]' 
+                      : 'text-slate-400 border-transparent hover:text-cyan-300 hover:bg-cyan-400/5 hover:border-cyan-400/40'
                   }`}
                 >
                   {activeSection === section && (
-                    <motion.div
-                      layoutId="activeTab"
-                      className="absolute inset-0 border border-cyan-400/30 rounded-lg"
-                      transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
-                    />
+                    <>
+                      <motion.div
+                        layoutId="activeTab"
+                        className="absolute inset-0 bg-cyan-400/10 rounded-lg"
+                        transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+                      />
+                      <motion.div
+                        layoutId="activeUnderline"
+                        className="absolute -bottom-1 left-4 right-4 h-0.5 rounded-full bg-cyan-400"
+                        transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+                      />
+                    </>
                   )}
                   <span className="relative z-10">{section}</span>
                 </button>
@@ -250,17 +306,20 @@ function App() {
               </motion.div>
 
               <h1 className="text-5xl md:text-7xl font-bold mb-6 font-bricolage leading-tight">
-                <span className="text-slate-200">Building</span>{' '}
-                <ScrambleText text="Digital" className="gradient-text text-glow" /><br />
-                <ScrambleText text="Ecosystems" className="gradient-text-alt text-glow-purple" />
+                <span className="text-slate-200">Full-stack</span>{' '}
+                <span className="gradient-text text-glow">Software Engineer</span><br />
+                <span className="gradient-text-alt text-glow-purple">Designing Digital Ecosystems</span>
               </h1>
-
-              <p className="text-lg md:text-xl text-slate-400 mb-8 max-w-2xl font-space leading-relaxed">
-                <ScrambleText 
-                  text="Full-stack engineer crafting scalable solutions and innovative experiences. Transforming complex problems into elegant code."
-                  speed={30}
-                />
-              </p>
+              <div className="flex flex-wrap gap-2 mb-8 justify-center lg:justify-start">
+                {["Gov-scale systems", "Performance", "Cloud-native", "Mentor"].map((tag, i) => (
+                  <span
+                    key={i}
+                    className="px-3 py-1 rounded-full border border-cyan-500/40 bg-cyan-500/5 text-xs font-mono text-cyan-200"
+                  >
+                    {tag}
+                  </span>
+                ))}
+              </div>
 
               <div className="flex flex-wrap gap-4 mb-8 justify-center lg:justify-start">
                 <motion.button
@@ -443,6 +502,26 @@ function App() {
             </h2>
             <p className="text-slate-400 font-medium font-space text-lg">Building impactful solutions across diverse domains</p>
           </motion.div>
+          <div className="flex flex-wrap justify-center gap-4 mb-10">
+            {journeyChapters.map((chapter) => (
+              <button
+                key={chapter.key}
+                onClick={() => {
+                  setActiveChapter(chapter.targetId)
+                  document.getElementById(chapter.targetId)?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+                }}
+                className={`px-4 py-3 rounded-xl border text-left transition-all duration-300 ${
+                  activeChapter === chapter.targetId
+                    ? 'border-cyan-500/70 bg-cyan-500/10 text-cyan-200 shadow-[0_0_20px_rgba(34,211,238,0.35)]'
+                    : 'border-slate-700 bg-slate-900/40 text-slate-300 hover:border-cyan-500/40 hover:bg-slate-900/70'
+                }`}
+              >
+                <div className="text-xs font-mono text-slate-400">{chapter.label}</div>
+                <div className="text-sm font-semibold font-space">{chapter.title}</div>
+                <div className="text-xs font-mono text-slate-500">{chapter.subtitle}</div>
+              </button>
+            ))}
+          </div>
           
           <div className="relative">
             {/* Timeline Line */}
@@ -451,6 +530,7 @@ function App() {
             <div className="space-y-8">
               {[
                 {
+                  id: 'chapter-dsi',
                   title: "Software Engineer",
                   company: "Dynamic Solution Innovators",
                   period: "Sep 2021 - Present",
@@ -468,6 +548,7 @@ function App() {
                   ]
                 },
                 {
+                  id: 'chapter-outlier',
                   title: "Reviewer",
                   company: "Outlier AI",
                   period: "Jun 2025 - Present",
@@ -479,6 +560,7 @@ function App() {
                   ]
                 },
                 {
+                  id: 'chapter-junior',
                   title: "Junior Software Engineer",
                   company: "Frenclub Mobile",
                   period: "Oct 2019 - Aug 2021",
@@ -493,6 +575,7 @@ function App() {
               ].map((job, index) => (
                 <motion.div
                   key={index}
+                  id={job.id}
                   initial={{ opacity: 0, x: -30 }}
                   whileInView={{ opacity: 1, x: 0 }}
                   transition={{ duration: 0.6, delay: index * 0.1 }}
@@ -624,7 +707,7 @@ function App() {
                 </div>
                 <h3 className="text-xl font-bold text-white mb-4 font-bricolage">Backend</h3>
                 <div className="flex flex-wrap gap-2">
-                  {["Express", "Spring Boot", "FastAPI", "Laravel", "Payload CMS"].map((skill, i) => (
+                  {["Express", "Spring Boot", "FastAPI", "Laravel", "Payload CMS", "Docker", "CI/CD pipelines"].map((skill, i) => (
                     <span key={i} className="px-3 py-1 rounded-lg bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 text-xs font-mono hover:bg-emerald-500/20 transition-colors duration-200">
                       {skill}
                     </span>
@@ -647,7 +730,7 @@ function App() {
                 </div>
                 <h3 className="text-xl font-bold text-white mb-4 font-bricolage">Database & Cloud</h3>
                 <div className="flex flex-wrap gap-2">
-                  {["PostgreSQL", "MongoDB", "MSSQL", "Oracle", "Firebase", "Supabase"].map((skill, i) => (
+                  {["PostgreSQL", "MongoDB", "MSSQL", "Oracle", "Firebase", "Supabase", "AWS (EC2, S3, Amplify)", "DynamoDB", "Wasabi", "Hostinger"].map((skill, i) => (
                     <span key={i} className="px-3 py-1 rounded-lg bg-amber-500/10 border border-amber-500/30 text-amber-300 text-xs font-mono hover:bg-amber-500/20 transition-colors duration-200">
                       {skill}
                     </span>
@@ -684,25 +767,47 @@ function App() {
             <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }} viewport={{ once: true }} className="group">
               <TiltCard className="h-full">
                 <div className="glass-card-hover rounded-2xl overflow-hidden h-full flex flex-col">
-                <div className="p-6 bg-gradient-to-br from-cyan-500/10 to-cyan-600/5 border-b border-cyan-500/20">
-                  <div className="flex items-start justify-between mb-4">
-                    <div className="w-12 h-12 rounded-xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center">
-                      <GraduationCap className="w-6 h-6 text-cyan-400" />
+                  <div className="p-6 bg-gradient-to-br from-cyan-500/10 to-cyan-600/5 border-b border-cyan-500/20">
+                    <div className="flex items-start justify-between mb-4">
+                      <div className="w-12 h-12 rounded-xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center">
+                        <GraduationCap className="w-6 h-6 text-cyan-400" />
+                      </div>
+                      <ExternalLink className="w-5 h-5 text-cyan-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                     </div>
-                    <ExternalLink className="w-5 h-5 text-cyan-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                    <h3 className="text-2xl font-bold text-white mb-1 font-bricolage">IEIMS</h3>
+                    <p className="text-cyan-300 text-xs font-mono uppercase tracking-wide">Integrated Education Information Management System</p>
                   </div>
-                  <h3 className="text-2xl font-bold text-white mb-2 font-bricolage">IEIMS</h3>
-                  <p className="text-cyan-300 text-sm font-mono">Integrated Education Information Management System</p>
-                </div>
-                <div className="p-6 flex-1 flex flex-col">
-                  <p className="text-slate-400 font-space leading-relaxed mb-6 flex-1">Large-scale education platform with seamless data migration, optimized performance, and high availability</p>
-                  <div className="flex flex-wrap gap-2">
-                    {["Next.js", "Tailwind CSS", "Spring Boot", "MSSQL"].map((tech, i) => (
-                      <span key={i} className="px-3 py-1 rounded-lg bg-cyan-500/10 border border-cyan-500/30 text-cyan-300 text-xs font-mono">{tech}</span>
-                    ))}
+                  <div className="p-6 flex-1 flex flex-col">
+                    <div className="space-y-3 flex-1">
+                      <div>
+                        <p className="text-[11px] font-mono uppercase tracking-wide text-cyan-300">Problem</p>
+                        <p className="text-slate-300 font-space text-sm leading-relaxed">
+                          Large-scale education data needed a unified web platform with reliable reporting and migration.
+                        </p>
+                      </div>
+                      <div>
+                        <p className="text-[11px] font-mono uppercase tracking-wide text-cyan-300">Role</p>
+                        <p className="text-slate-300 font-space text-sm leading-relaxed">
+                          Full-stack engineer implementing core modules, executing data migration scripts, and tuning performance.
+                        </p>
+                      </div>
+                      <div>
+                        <p className="text-[11px] font-mono uppercase tracking-wide text-cyan-300">Tech</p>
+                        <div className="flex flex-wrap gap-2 mt-1">
+                          {["Next.js", "Tailwind CSS", "Spring Boot", "MSSQL"].map((tech, i) => (
+                            <span key={i} className="px-3 py-1 rounded-lg bg-cyan-500/10 border border-cyan-500/30 text-cyan-300 text-xs font-mono">{tech}</span>
+                          ))}
+                        </div>
+                      </div>
+                      <div>
+                        <p className="text-[11px] font-mono uppercase tracking-wide text-cyan-300">Outcome</p>
+                        <p className="text-slate-300 font-space text-sm leading-relaxed">
+                          Delivered seamless data migration and improved performance for nationwide education workflows.
+                        </p>
+                      </div>
+                    </div>
                   </div>
                 </div>
-              </div>
               </TiltCard>
             </motion.div>
 
@@ -716,15 +821,37 @@ function App() {
                     </div>
                     <ExternalLink className="w-5 h-5 text-emerald-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                   </div>
-                  <h3 className="text-2xl font-bold text-white mb-2 font-bricolage">CRVS</h3>
-                  <p className="text-emerald-300 text-sm font-mono">Civil Registration and Vital Statistics</p>
+                  <h3 className="text-2xl font-bold text-white mb-1 font-bricolage">CRVS</h3>
+                  <p className="text-emerald-300 text-xs font-mono uppercase tracking-wide">Civil Registration and Vital Statistics</p>
                 </div>
                 <div className="p-6 flex-1 flex flex-col">
-                  <p className="text-slate-400 font-space leading-relaxed mb-6 flex-1">Enhanced Laravel system for better performance, stability, and maintainability</p>
-                  <div className="flex flex-wrap gap-2">
-                    {["Laravel", "Oracle", "JavaScript"].map((tech, i) => (
-                      <span key={i} className="px-3 py-1 rounded-lg bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 text-xs font-mono">{tech}</span>
-                    ))}
+                  <div className="space-y-3 flex-1">
+                    <div>
+                      <p className="text-[11px] font-mono uppercase tracking-wide text-emerald-300">Problem</p>
+                      <p className="text-slate-300 font-space text-sm leading-relaxed">
+                        Existing registration workflows suffered from slow execution times and maintainability issues.
+                      </p>
+                    </div>
+                    <div>
+                      <p className="text-[11px] font-mono uppercase tracking-wide text-emerald-300">Role</p>
+                      <p className="text-slate-300 font-space text-sm leading-relaxed">
+                        Backend-focused full-stack engineer enhancing the Laravel codebase and optimizing queries.
+                      </p>
+                    </div>
+                    <div>
+                      <p className="text-[11px] font-mono uppercase tracking-wide text-emerald-300">Tech</p>
+                      <div className="flex flex-wrap gap-2 mt-1">
+                        {["Laravel", "Oracle", "JavaScript"].map((tech, i) => (
+                          <span key={i} className="px-3 py-1 rounded-lg bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 text-xs font-mono">{tech}</span>
+                        ))}
+                      </div>
+                    </div>
+                    <div>
+                      <p className="text-[11px] font-mono uppercase tracking-wide text-emerald-300">Outcome</p>
+                      <p className="text-slate-300 font-space text-sm leading-relaxed">
+                        Improved performance, stability, and maintainability, including execution time optimizations.
+                      </p>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -740,15 +867,37 @@ function App() {
                     </div>
                     <ExternalLink className="w-5 h-5 text-purple-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                   </div>
-                  <h3 className="text-2xl font-bold text-white mb-2 font-bricolage">RJSC</h3>
-                  <p className="text-purple-300 text-sm font-mono">Registrar of Joint Stock Companies</p>
+                  <h3 className="text-2xl font-bold text-white mb-1 font-bricolage">RJSC</h3>
+                  <p className="text-purple-300 text-xs font-mono uppercase tracking-wide">Registrar of Joint Stock Companies</p>
                 </div>
                 <div className="p-6 flex-1 flex flex-col">
-                  <p className="text-slate-400 font-space leading-relaxed mb-6 flex-1">Maintained and enhanced registration portal ensuring smooth operations and improved reliability</p>
-                  <div className="flex flex-wrap gap-2">
-                    {["Spring MVC", "Thymeleaf", "Oracle"].map((tech, i) => (
-                      <span key={i} className="px-3 py-1 rounded-lg bg-purple-500/10 border border-purple-500/30 text-purple-300 text-xs font-mono">{tech}</span>
-                    ))}
+                  <div className="space-y-3 flex-1">
+                    <div>
+                      <p className="text-[11px] font-mono uppercase tracking-wide text-purple-300">Problem</p>
+                      <p className="text-slate-300 font-space text-sm leading-relaxed">
+                        Critical business registration portal required ongoing maintenance and new features.
+                      </p>
+                    </div>
+                    <div>
+                      <p className="text-[11px] font-mono uppercase tracking-wide text-purple-300">Role</p>
+                      <p className="text-slate-300 font-space text-sm leading-relaxed">
+                        Full-stack engineer maintaining and enhancing the Spring MVC & Thymeleaf application.
+                      </p>
+                    </div>
+                    <div>
+                      <p className="text-[11px] font-mono uppercase tracking-wide text-purple-300">Tech</p>
+                      <div className="flex flex-wrap gap-2 mt-1">
+                        {["Spring MVC", "Thymeleaf", "Oracle"].map((tech, i) => (
+                          <span key={i} className="px-3 py-1 rounded-lg bg-purple-500/10 border border-purple-500/30 text-purple-300 text-xs font-mono">{tech}</span>
+                        ))}
+                      </div>
+                    </div>
+                    <div>
+                      <p className="text-[11px] font-mono uppercase tracking-wide text-purple-300">Outcome</p>
+                      <p className="text-slate-300 font-space text-sm leading-relaxed">
+                        Ensured smooth operations, reduced downtime, and improved reliability of core registration flows.
+                      </p>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -764,15 +913,37 @@ function App() {
                     </div>
                     <ExternalLink className="w-5 h-5 text-amber-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                   </div>
-                  <h3 className="text-2xl font-bold text-white mb-2 font-bricolage">Training Track</h3>
-                  <p className="text-amber-300 text-sm font-mono">Army Training Activity System</p>
+                  <h3 className="text-2xl font-bold text-white mb-1 font-bricolage">Training Track</h3>
+                  <p className="text-amber-300 text-xs font-mono uppercase tracking-wide">Army Training Activity System</p>
                 </div>
                 <div className="p-6 flex-1 flex flex-col">
-                  <p className="text-slate-400 font-space leading-relaxed mb-6 flex-1">System to accurately track army training activities including firing, grenade throwing, and formations</p>
-                  <div className="flex flex-wrap gap-2">
-                    {["Next.js", "Express", "PostgreSQL", "Tailwind"].map((tech, i) => (
-                      <span key={i} className="px-3 py-1 rounded-lg bg-amber-500/10 border border-amber-500/30 text-amber-300 text-xs font-mono">{tech}</span>
-                    ))}
+                  <div className="space-y-3 flex-1">
+                    <div>
+                      <p className="text-[11px] font-mono uppercase tracking-wide text-amber-300">Problem</p>
+                      <p className="text-slate-300 font-space text-sm leading-relaxed">
+                        Paper-based or fragmented tracking made it hard to accurately monitor army training activities.
+                      </p>
+                    </div>
+                    <div>
+                      <p className="text-[11px] font-mono uppercase tracking-wide text-amber-300">Role</p>
+                      <p className="text-slate-300 font-space text-sm leading-relaxed">
+                        Full-stack engineer designing and building a web system for detailed training activity tracking.
+                      </p>
+                    </div>
+                    <div>
+                      <p className="text-[11px] font-mono uppercase tracking-wide text-amber-300">Tech</p>
+                      <div className="flex flex-wrap gap-2 mt-1">
+                        {["Next.js", "Express", "PostgreSQL", "Tailwind"].map((tech, i) => (
+                          <span key={i} className="px-3 py-1 rounded-lg bg-amber-500/10 border border-amber-500/30 text-amber-300 text-xs font-mono">{tech}</span>
+                        ))}
+                      </div>
+                    </div>
+                    <div>
+                      <p className="text-[11px] font-mono uppercase tracking-wide text-amber-300">Outcome</p>
+                      <p className="text-slate-300 font-space text-sm leading-relaxed">
+                        Delivered accurate, centralized visibility into training sessions like firing, grenade throwing, and formations.
+                      </p>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -788,15 +959,37 @@ function App() {
                     </div>
                     <ExternalLink className="w-5 h-5 text-pink-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                   </div>
-                  <h3 className="text-2xl font-bold text-white mb-2 font-bricolage">AI Assistant</h3>
-                  <p className="text-pink-300 text-sm font-mono">Organizational Data Chatbot</p>
+                  <h3 className="text-2xl font-bold text-white mb-1 font-bricolage">AI Assistant</h3>
+                  <p className="text-pink-300 text-xs font-mono uppercase tracking-wide">Organizational Data Chatbot</p>
                 </div>
                 <div className="p-6 flex-1 flex flex-col">
-                  <p className="text-slate-400 font-space leading-relaxed mb-6 flex-1">Dedicated chatbot for public organizational data and non-confidential database information</p>
-                  <div className="flex flex-wrap gap-2">
-                    {["FastAPI", "Langchain", "React", "PostgreSQL"].map((tech, i) => (
-                      <span key={i} className="px-3 py-1 rounded-lg bg-pink-500/10 border border-pink-500/30 text-pink-300 text-xs font-mono">{tech}</span>
-                    ))}
+                  <div className="space-y-3 flex-1">
+                    <div>
+                      <p className="text-[11px] font-mono uppercase tracking-wide text-pink-300">Problem</p>
+                      <p className="text-slate-300 font-space text-sm leading-relaxed">
+                        Teams needed a faster way to query public organizational data and non-confidential databases.
+                      </p>
+                    </div>
+                    <div>
+                      <p className="text-[11px] font-mono uppercase tracking-wide text-pink-300">Role</p>
+                      <p className="text-slate-300 font-space text-sm leading-relaxed">
+                        Full-stack engineer building the chatbot frontend and FastAPI backend with LLM integration.
+                      </p>
+                    </div>
+                    <div>
+                      <p className="text-[11px] font-mono uppercase tracking-wide text-pink-300">Tech</p>
+                      <div className="flex flex-wrap gap-2 mt-1">
+                        {["FastAPI", "Langchain", "React", "PostgreSQL"].map((tech, i) => (
+                          <span key={i} className="px-3 py-1 rounded-lg bg-pink-500/10 border border-pink-500/30 text-pink-300 text-xs font-mono">{tech}</span>
+                        ))}
+                      </div>
+                    </div>
+                    <div>
+                      <p className="text-[11px] font-mono uppercase tracking-wide text-pink-300">Outcome</p>
+                      <p className="text-slate-300 font-space text-sm leading-relaxed">
+                        Provided a dedicated assistant for quickly answering questions over organizational datasets.
+                      </p>
+                    </div>
                   </div>
                 </div>
               </div>

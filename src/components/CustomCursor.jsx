@@ -1,23 +1,46 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { motion } from 'framer-motion';
 
 const CustomCursor = () => {
+  const [enabled, setEnabled] = useState(false);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [cursorVariant, setCursorVariant] = useState('default');
   const [particles, setParticles] = useState([]);
+  const lastMousePositionRef = useRef({ x: 0, y: 0 });
+  const frameRef = useRef(null);
 
   useEffect(() => {
+    if (typeof window === 'undefined') return;
+
+    const supportsPointerFine = window.matchMedia && window.matchMedia('(pointer: fine)').matches;
+    const prefersReducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    if (supportsPointerFine && !prefersReducedMotion) {
+      setEnabled(true);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!enabled) return;
+
     const mouseMove = (e) => {
-      setMousePosition({ x: e.clientX, y: e.clientY });
+      lastMousePositionRef.current = { x: e.clientX, y: e.clientY };
+
+      if (!frameRef.current) {
+        frameRef.current = requestAnimationFrame(() => {
+          setMousePosition(lastMousePositionRef.current);
+          frameRef.current = null;
+        });
+      }
       
       // Create particle trail
-      if (Math.random() > 0.7) {
+      if (Math.random() > 0.9) {
         const newParticle = {
           id: Date.now() + Math.random(),
           x: e.clientX,
           y: e.clientY,
         };
-        setParticles(prev => [...prev.slice(-10), newParticle]);
+        setParticles(prev => [...prev.slice(-6), newParticle]);
       }
     };
 
@@ -39,8 +62,16 @@ const CustomCursor = () => {
         el.removeEventListener('mouseenter', handleMouseEnter);
         el.removeEventListener('mouseleave', handleMouseLeave);
       });
+      if (frameRef.current) {
+        cancelAnimationFrame(frameRef.current);
+        frameRef.current = null;
+      }
     };
-  }, []);
+  }, [enabled]);
+
+  if (!enabled) {
+    return null;
+  }
 
   const variants = {
     default: {

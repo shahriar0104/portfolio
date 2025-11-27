@@ -11,9 +11,18 @@ const ParticleBackground = () => {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 
+    const prefersReducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const hasFinePointer = window.matchMedia && window.matchMedia('(pointer: fine)').matches;
+
+    if (prefersReducedMotion) {
+      return;
+    }
+
     const particles = [];
-    const particleCount = 100;
+    const baseParticleCount = 100;
+    const particleCount = hasFinePointer ? baseParticleCount : Math.floor(baseParticleCount / 2);
     const mouse = { x: null, y: null, radius: 150 };
+    let animationFrameId;
 
     class Particle {
       constructor() {
@@ -89,10 +98,10 @@ const ParticleBackground = () => {
       });
       
       connectParticles();
-      requestAnimationFrame(animate);
+      animationFrameId = requestAnimationFrame(animate);
     };
 
-    animate();
+    animationFrameId = requestAnimationFrame(animate);
 
     // Mouse move handler
     const handleMouseMove = (e) => {
@@ -119,6 +128,9 @@ const ParticleBackground = () => {
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('mouseleave', handleMouseLeave);
       window.removeEventListener('resize', handleResize);
+      if (animationFrameId) {
+        cancelAnimationFrame(animationFrameId);
+      }
     };
   }, []);
 
