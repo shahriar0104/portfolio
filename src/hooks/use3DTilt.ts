@@ -1,11 +1,25 @@
-import { useRef, useState } from 'react';
+import { useRef, useState, type CSSProperties, type MouseEvent as ReactMouseEvent } from "react";
 
-export const use3DTilt = (options = {}) => {
+export type TiltOptions = {
+  max?: number;
+  perspective?: number;
+  scale?: number;
+  speed?: number;
+};
+
+export type TiltResult = {
+  ref: React.RefObject<HTMLDivElement | null>;
+  style: CSSProperties;
+  onMouseMove: (e: ReactMouseEvent<HTMLDivElement>) => void;
+  onMouseLeave: () => void;
+};
+
+export const use3DTilt = (options: TiltOptions = {}): TiltResult => {
   const { max = 15, perspective = 1000, scale = 1.05, speed = 400 } = options;
-  const ref = useRef(null);
-  const [tiltStyle, setTiltStyle] = useState({});
+  const ref = useRef<HTMLDivElement | null>(null);
+  const [tiltStyle, setTiltStyle] = useState<CSSProperties>({});
 
-  const handleMouseMove = (e) => {
+  const handleMouseMove = (e: ReactMouseEvent<HTMLDivElement>) => {
     if (!ref.current) return;
 
     const rect = ref.current.getBoundingClientRect();
@@ -25,7 +39,10 @@ export const use3DTilt = (options = {}) => {
 
   const handleMouseLeave = () => {
     setTiltStyle({
-      transform: `perspective(${perspective}px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`,
+      transform:
+        "perspective(" +
+        perspective +
+        "px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)",
       transition: `transform ${speed}ms cubic-bezier(0.03, 0.98, 0.52, 0.99)`,
     });
   };

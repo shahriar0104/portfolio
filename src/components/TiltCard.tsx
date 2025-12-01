@@ -1,6 +1,12 @@
-import { use3DTilt } from '../hooks/use3DTilt';
+import React from "react";
+import { use3DTilt } from "../hooks/use3DTilt";
 
-const TiltCard = ({ children, className = '' }) => {
+interface TiltCardProps {
+  children: React.ReactNode;
+  className?: string;
+}
+
+const TiltCard: React.FC<TiltCardProps> = ({ children, className = "" }) => {
   const tilt = use3DTilt({ max: 10, scale: 1.02, speed: 300 });
 
   return (
