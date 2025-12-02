@@ -42,12 +42,11 @@ export function LaunchPad() {
                                 initial={{ opacity: 0, y: 20 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ delay: 0.3 }}
-                                className="text-5xl lg:text-6xl font-display font-bold text-white leading-tight"
+                                className="text-4xl lg:text-5xl font-display font-bold text-white leading-tight"
                             >
-                                Full-Stack Launch
-                                <br />
+                                Full-Stack Systems for{' '}
                                 <span className="bg-gradient-to-r from-accent-cyan via-accent-purple to-accent-emerald bg-clip-text text-transparent">
-                                    From Dhaka to Orbit
+                                    High-Scale Products
                                 </span>
                             </motion.h1>
 
@@ -101,12 +100,12 @@ export function LaunchPad() {
                             <InfoCard
                                 icon={<Code2 className="w-5 h-5" />}
                                 label="Stack"
-                                value="Next.js, React, Node"
+                                value="Spring, Express, Next.js, Cloud"
                             />
                             <InfoCard
                                 icon={<TrendingUp className="w-5 h-5" />}
                                 label="Trajectory"
-                                value="Gov-scale systems"
+                                value="Global SaaS & enterprise products"
                             />
                         </motion.div>
                     </motion.div>

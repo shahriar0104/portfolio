@@ -185,8 +185,8 @@ Feel free to fork this project and customize it for your own portfolio. If you f
 
 - **Email**: swe.shadman@gmail.com
 - **Phone**: +8801965392623
-- **LinkedIn**: [Your LinkedIn Profile]
-- **GitHub**: [Your GitHub Profile]
+- **LinkedIn**: https://www.linkedin.com/in/swe-shadman/
+- **GitHub**: https://github.com/shahriar0104
 
 ---
 

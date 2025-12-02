@@ -13,46 +13,53 @@ interface SkillCategory {
 
 const skillCategories: SkillCategory[] = [
     {
-        id: 'languages',
-        title: 'Languages',
-        icon: <Terminal className="w-5 h-5" />,
-        skills: ['TypeScript', 'JavaScript', 'Python', 'Java', 'SQL'],
-        color: 'cyan'
-    },
-    {
-        id: 'frontend',
-        title: 'Frontend',
+        id: 'javascript-frameworks',
+        title: 'JavaScript Frameworks',
         icon: <Code2 className="w-5 h-5" />,
-        skills: ['React', 'Next.js', 'Angular', 'Tailwind CSS', 'Framer Motion'],
-        color: 'purple'
-    },
-    {
-        id: 'backend',
-        title: 'Backend',
-        icon: <Layers className="w-5 h-5" />,
-        skills: ['Node.js', 'Express', 'NestJS', 'REST APIs', 'GraphQL'],
-        color: 'emerald'
-    },
-    {
-        id: 'database',
-        title: 'Databases',
-        icon: <Database className="w-5 h-5" />,
-        skills: ['PostgreSQL', 'MongoDB', 'Redis', 'MySQL'],
+        skills: ['Next.js', 'React.js', 'Angular', 'jQuery'],
         color: 'cyan'
     },
     {
-        id: 'cloud',
-        title: 'Cloud & DevOps',
-        icon: <Cloud className="w-5 h-5" />,
-        skills: ['Docker', 'AWS', 'CI/CD', 'Git', 'Linux'],
+        id: 'nodejs-frameworks',
+        title: 'Node.js Frameworks',
+        icon: <Layers className="w-5 h-5" />,
+        skills: ['Express.js', 'NestJS'],
         color: 'purple'
     },
     {
-        id: 'tools',
-        title: 'Tools & Others',
-        icon: <Wrench className="w-5 h-5" />,
-        skills: ['AI/ML', 'LLMs', 'Performance Optimization', 'System Design'],
+        id: 'java-frameworks',
+        title: 'Java Frameworks',
+        icon: <Terminal className="w-5 h-5" />,
+        skills: ['Spring Boot', 'Spring MVC'],
         color: 'emerald'
+    },
+    {
+        id: 'relational-databases',
+        title: 'Relational Databases',
+        icon: <Database className="w-5 h-5" />,
+        skills: ['Oracle', 'MySQL', 'SQL Server', 'PostgreSQL', 'Supabase', 'SQLite'],
+        color: 'cyan'
+    },
+    {
+        id: 'nosql-databases',
+        title: 'NoSQL Databases',
+        icon: <Database className="w-5 h-5" />,
+        skills: ['MongoDB', 'Firebase'],
+        color: 'purple'
+    },
+    {
+        id: 'cloud-services',
+        title: 'Cloud & Virtualization',
+        icon: <Cloud className="w-5 h-5" />,
+        skills: ['Docker', 'AWS', 'Wasabi', 'Vercel'],
+        color: 'emerald'
+    },
+    {
+        id: 'miscellaneous',
+        title: 'Miscellaneous Expertise',
+        icon: <Wrench className="w-5 h-5" />,
+        skills: ['CSS3', 'HTML5', 'Debian/Ubuntu Server', 'Tomcat', 'Agile/Scrum', 'Maven', 'Git', 'IntelliJ IDEA', 'VS Code'],
+        color: 'cyan'
     }
 ];
 
@@ -77,7 +84,7 @@ export function SkillsDashboard() {
                         <Terminal className="w-4 h-4 text-accent-emerald" />
                         <span className="text-sm font-mono text-accent-emerald">TECH ARSENAL</span>
                     </div>
-                    <h2 className="text-5xl font-display font-bold text-white mb-4">
+                    <h2 className="text-4xl md:text-5xl font-display font-bold text-white mb-4">
                         Control Systems
                     </h2>
                     <p className="text-gray-400 text-lg max-w-2xl mx-auto">

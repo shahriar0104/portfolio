@@ -97,7 +97,7 @@ export function GlobeSection() {
                         <div className="w-2 h-2 rounded-full bg-accent-emerald animate-pulse" />
                         <span className="text-sm font-mono text-accent-emerald">LAUNCH TRAJECTORY</span>
                     </div>
-                    <h2 className="text-5xl md:text-6xl font-display font-bold text-white mb-6 drop-shadow-[0_0_30px_rgba(0,217,255,0.5)]">
+                    <h2 className="text-4xl md:text-5xl font-display font-bold text-white mb-6 drop-shadow-[0_0_30px_rgba(0,217,255,0.5)]">
                         Based in Dhaka
                         <br />
                         <span className="bg-gradient-to-r from-accent-emerald via-accent-cyan to-accent-purple bg-clip-text text-transparent">

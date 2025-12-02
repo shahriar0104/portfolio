@@ -14,23 +14,10 @@ interface Mission {
 
 const missions: Mission[] = [
     {
-        id: 'outlier',
-        company: 'Outlier AI',
-        role: 'AI Training & Frontend Development',
-        period: '2023 - Present',
-        achievements: [
-            'Promoted to reviewer based on exceptional performance in AI training tasks',
-            'Specialized in LLM evaluation and prompt engineering for production systems',
-            'Contributed to frontend development for AI-powered applications',
-            'Maintained 95%+ accuracy rate across training assignments'
-        ],
-        techStack: ['React', 'TypeScript', 'AI/ML', 'LLMs']
-    },
-    {
         id: 'dsi',
         company: 'Dynamic Solution Innovators',
         role: 'Full-Stack Engineer',
-        period: '2021 - 2023',
+        period: '2021 - Present',
         achievements: [
             'Reduced CRVS execution time from ~50s to <4s through query optimization',
             'Architected modules end-to-end for national education information system (IEIMS)',
@@ -38,7 +25,38 @@ const missions: Mission[] = [
             'Led performance optimization initiatives across multiple projects',
             'Implemented real-time data synchronization for critical government services'
         ],
-        techStack: ['Angular', 'Node.js', 'PostgreSQL', 'Redis', 'Docker']
+        techStack: [
+            'Spring Boot',
+            'Spring MVC',
+            'Next.js',
+            'React',
+            'Express.js',
+            'Node.js',
+            'Payload CMS',
+            'PostgreSQL',
+            'Docker',
+            'Kubernetes',
+            'AWS',
+        ]
+    },
+    {
+        id: 'outlier',
+        company: 'Outlier AI',
+        role: 'AI Training & Frontend Development',
+        period: '2025 - Present',
+        achievements: [
+            'Promoted to reviewer based on exceptional performance in AI training tasks',
+            'Specialized in LLM evaluation and prompt engineering for production systems',
+            'Contributed to frontend development for AI-powered applications',
+            'Maintained 95%+ accuracy rate across training assignments'
+        ],
+        techStack: [
+            'Next.js',
+            'React',
+            'TypeScript',
+            'AI/ML',
+            'LLMs',
+        ]
     },
     {
         id: 'frenclub',
@@ -51,7 +69,7 @@ const missions: Mission[] = [
             'Collaborated with cross-functional teams on product features',
             'Gained foundational experience in full-stack development'
         ],
-        techStack: ['Angular', 'TypeScript', 'REST APIs']
+        techStack: ['Angular', 'TypeScript', 'Android', 'REST APIs']
     }
 ];
 
@@ -76,7 +94,7 @@ export function CareerTimeline() {
                         <Rocket className="w-4 h-4 text-accent-purple" />
                         <span className="text-sm font-mono text-accent-purple">MISSION LOGS</span>
                     </div>
-                    <h2 className="text-5xl font-display font-bold text-white mb-4">
+                    <h2 className="text-4xl md:text-5xl font-display font-bold text-white mb-4">
                         Career Trajectory
                     </h2>
                     <p className="text-gray-400 text-lg max-w-2xl mx-auto">

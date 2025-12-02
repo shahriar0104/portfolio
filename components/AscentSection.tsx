@@ -39,7 +39,7 @@ export function AscentSection() {
                     style={{ opacity }}
                     className="text-center"
                 >
-                    <h2 className="text-4xl font-display font-bold text-white/80">
+                    <h2 className="text-3xl md:text-4xl font-display font-bold text-white/80">
                         Ascending to Orbit
                     </h2>
                     <p className="text-gray-400 mt-2 font-mono text-sm">

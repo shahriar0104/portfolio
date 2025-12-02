@@ -72,7 +72,7 @@ export function Navigation() {
                     </button>
 
                     {/* Nav Items */}
-                    <div className="flex items-center gap-1 bg-space-medium/60 backdrop-blur-xl border border-white/10 rounded-full px-2 py-2">
+                    <div className="flex items-center gap-1 bg-space-medium/60 backdrop-blur-xl border border-white/10 rounded-full px-2 py-2 font-menu">
                         {navItems.map((item) => (
                             <button
                                 key={item.id}

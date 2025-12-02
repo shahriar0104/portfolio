@@ -11,22 +11,22 @@ export function ContactSection() {
         {
             icon: <Mail className="w-6 h-6" />,
             label: 'Email',
-            value: 'shadman.shahriar@example.com',
-            href: 'mailto:shadman.shahriar@example.com',
+            value: 'swe.shadman@gmail.com',
+            href: 'mailto:swe.shadman@gmail.com',
             color: 'cyan'
         },
         {
             icon: <Linkedin className="w-6 h-6" />,
             label: 'LinkedIn',
             value: 'Connect on LinkedIn',
-            href: 'https://linkedin.com',
+            href: 'https://www.linkedin.com/in/swe-shadman/',
             color: 'purple'
         },
         {
             icon: <Github className="w-6 h-6" />,
             label: 'GitHub',
             value: 'View repositories',
-            href: 'https://github.com',
+            href: 'https://github.com/shahriar0104',
             color: 'emerald'
         }
     ];
@@ -49,7 +49,7 @@ export function ContactSection() {
                         <span className="text-sm font-mono text-accent-cyan">MISSION CONTROL</span>
                     </div>
 
-                    <h2 className="text-5xl font-display font-bold text-white mb-6">
+                    <h2 className="text-4xl md:text-5xl font-display font-bold text-white mb-6">
                         Ready to Dock
                     </h2>
 
