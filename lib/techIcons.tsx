@@ -25,6 +25,8 @@ import {
   SiRender,
   SiWasabi,
   SiThymeleaf,
+  SiLaravel,
+  SiFastapi,
 } from "react-icons/si";
 
 const CurlyBracesIcon: IconType = ({ color, className }) => (
@@ -45,6 +47,30 @@ const UiLibraryIcon: IconType = ({ color, className }) => (
   </span>
 );
 
+const NidIcon: IconType = ({ color, className }) => (
+  <span style={{ color }} className={className}>
+    ID
+  </span>
+);
+
+const BrnIcon: IconType = ({ color, className }) => (
+  <span style={{ color }} className={className}>
+    DOB
+  </span>
+);
+
+const RagIcon: IconType = ({ color, className }) => (
+  <span style={{ color }} className={className}>
+    RAG
+  </span>
+);
+
+const LlmIcon: IconType = ({ color, className }) => (
+  <span style={{ color }} className={className}>
+    AI
+  </span>
+);
+
 type TechIconMeta = {
   icon: IconType;
   color: string;
@@ -62,6 +88,8 @@ const map: Record<string, TechIconMeta> = {
   "Spring Boot": { icon: SiSpringboot, color: "#6DB33F" },
   "Spring MVC": { icon: SiSpringboot, color: "#6DB33F" },
   Thymeleaf: { icon: SiThymeleaf, color: "#005F0F" },
+  Laravel: { icon: SiLaravel, color: "#FF2D20" },
+  "Fast API": { icon: SiFastapi, color: "#05998b" },
   "SQL Server": { icon: SqlServerIcon, color: "#CC2927" },
   PostgreSQL: { icon: SiPostgresql, color: "#336791" },
   Oracle: { icon: SiOracle, color: "#F80000" },
@@ -77,6 +105,10 @@ const map: Record<string, TechIconMeta> = {
   Wasabi: { icon: SiWasabi, color: "#78A83B" },
   Render: { icon: SiRender, color: "#46E3B7" },
   "Custom UI Library": { icon: UiLibraryIcon, color: "#6366F1" },
+  "NID Integration": { icon: NidIcon, color: "#22C55E" },
+  "BRN Integration": { icon: BrnIcon, color: "#FACC15" },
+  "RAG Pipeline": { icon: RagIcon, color: "#38BDF8" },
+  LLMs: { icon: LlmIcon, color: "#F97316" },
   "3rd Prty APIs": { icon: CurlyBracesIcon, color: "#F97316" },
 };
 

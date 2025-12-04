@@ -62,6 +62,34 @@ const caseStudies = [
       "/case-studies/rjsc-3.png",
     ],
   },
+  {
+    id: "crvs",
+    title: "CRVS – Civil Registration and Vital Statistics",
+    role: "Performance engineer & bug-fix specialist",
+    timeframe: "Multi-year rollout",
+    problem:
+      "Existing CRVS deployment suffered from fragile integrations, incorrect business logic and slow responses on critical flows.",
+    solution:
+      "Debugged and fixed NID/BRN integrations, corrected key business rules and profiled/refactored bottlenecks to improve overall system performance.",
+    impact:
+      "Delivers more reliable student registration and identification, birth certificate verification, school enrollment tracking and migration records.",
+    stack: ["Laravel", "Oracle", "NID Integration", "BRN Integration"],
+    images: [],
+  },
+  {
+    id: "ai-assistant",
+    title: "AI Assistant – Chat Widget",
+    role: "Full-stack engineer",
+    timeframe: "Ongoing",
+    problem:
+      "Teams needed an AI assistant that could be embedded into any frontend stack while handling diverse documents and scripts.",
+    solution:
+      "Built a FRAMEWORK AGNOSTIC, plug-and-play chat widget with an optimized RAG pipeline and robust document extraction for images, PDFs, Bengali text and non-Unicode fonts like SutonnyMJ.",
+    impact:
+      "Enables fast integration of AI assistants into React, Vue, Angular and vanilla apps while delivering more accurate, context-aware responses.",
+    stack: ["React", "Fast API", "Docker", "RAG Pipeline", "LLMs"],
+    images: [],
+  },
 ];
 
 export function CaseStudiesSection() {
@@ -239,8 +267,16 @@ export function CaseStudiesSection() {
                     </div>
                   ))
                 ) : (
-                  <div className="w-full h-full flex items-center justify-center text-xs text-neutral-500">
-                    Project visuals go here
+                  <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 px-6 text-center">
+                    <div className="inline-flex items-center justify-center rounded-full border border-neutral-700/80 bg-black/60 px-3 py-1 text-[0.65rem] uppercase tracking-[0.24em] text-neutral-400">
+                      Case Study
+                    </div>
+                    <p className="text-base md:text-lg font-semibold text-neutral-50">
+                      {study.title}
+                    </p>
+                    <p className="text-[0.7rem] md:text-xs text-neutral-400 max-w-md">
+                      {study.impact}
+                    </p>
                   </div>
                 )}
               </div>
