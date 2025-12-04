@@ -3,8 +3,7 @@
 import Image from "next/image";
 import { useRef } from "react";
 import { useIsomorphicLayoutEffect } from "../hooks/useIsomorphicLayoutEffect";
-import { gsap } from "../animations/gsapConfig";
-import { pinScrollSection } from "../animations/pinScrollSection";
+import { gsap, registerGsap } from "../animations/gsapConfig";
 import { fadeInUp } from "../animations/fadeInUp";
 import { getTechIcon } from "../lib/techIcons";
 
@@ -55,14 +54,16 @@ export function CaseStudiesSection() {
     const section = sectionRef.current;
 
     const ctx = gsap.context(() => {
-      const pinEnd = "+=" + 200 * caseStudies.length + "%";
+      registerGsap();
 
-      pinScrollSection(section, { start: "top top", end: pinEnd, scrub: true });
       fadeInUp(".case-heading", { y: 40 });
       fadeInUp(".case-main", { delay: 0.2, y: 40 });
 
-      const visuals = gsap.utils.toArray<HTMLElement>(".case-visual");
-      visuals.forEach((visual) => {
+      const cases = gsap.utils.toArray<HTMLElement>(".case-main");
+      cases.forEach((caseEl) => {
+        const visual = caseEl.querySelector<HTMLElement>(".case-visual");
+        if (!visual) return;
+
         const slides = visual.querySelectorAll<HTMLElement>(".case-visual-slide");
         if (!slides.length || slides.length === 1) return;
 
@@ -70,37 +71,111 @@ export function CaseStudiesSection() {
         gsap.set(slides, { xPercent: 100 });
         gsap.set(slides[0], { xPercent: 0 });
 
-        const tl = gsap.timeline({
-          scrollTrigger: {
-            trigger: visual,
-            // Start transitions only after the section is pinned:
-            // first when the visual's top reaches the viewport top,
-            // then progress until its bottom leaves the top.
-            start: "top top",
-            end: "bottom top",
-            scrub: true,
-          },
-        });
+        if (slides.length === 3) {
+          const steps = 4;
 
-        slides.forEach((slide, index) => {
-          if (index === 0) return;
-          const prev = slides[index - 1];
+          const tl = gsap.timeline({
+            scrollTrigger: {
+              trigger: caseEl,
+              start: "center center",
+              end: "+=" + steps * 100 + "%",
+              scrub: true,
+              pin: true,
+              anticipatePin: 1,
+            },
+          });
 
-          tl.to(prev, {
-            xPercent: -100,
-            duration: 0.6,
-            ease: "power2.inOut",
-          }).fromTo(
-            slide,
-            { xPercent: 100 },
+          // Step 1: 2nd image moves halfway in while 1st image starts sliding out.
+          tl.to(slides[1], {
+            xPercent: 50,
+            duration: 1,
+            ease: "none",
+          }).to(
+            slides[0],
             {
-              xPercent: 0,
-              duration: 0.6,
-              ease: "power2.inOut",
+              xPercent: -50,
+              duration: 1,
+              ease: "none",
             },
             "<"
           );
-        });
+
+          // Step 2: 2nd image goes fully center while 1st image completes exiting.
+          tl.to(slides[1], {
+            xPercent: 0,
+            duration: 1,
+            ease: "none",
+          }).to(
+            slides[0],
+            {
+              xPercent: -100,
+              duration: 1,
+              ease: "none",
+            },
+            "<"
+          );
+
+          // Step 3: 3rd image moves halfway in while 2nd image starts sliding out.
+          tl.to(slides[2], {
+            xPercent: 50,
+            duration: 1,
+            ease: "none",
+          }).to(
+            slides[1],
+            {
+              xPercent: -50,
+              duration: 1,
+              ease: "none",
+            },
+            "<"
+          );
+
+          // Step 4: 3rd image goes fully center while 2nd image completes exiting.
+          tl.to(slides[2], {
+            xPercent: 0,
+            duration: 1,
+            ease: "none",
+          }).to(
+            slides[1],
+            {
+              xPercent: -100,
+              duration: 1,
+              ease: "none",
+            },
+            "<"
+          );
+        } else {
+          const tl = gsap.timeline({
+            scrollTrigger: {
+              trigger: caseEl,
+              start: "center center",
+              end: "+=" + slides.length * 150 + "%",
+              scrub: true,
+              pin: true,
+              anticipatePin: 1,
+            },
+          });
+
+          slides.forEach((slide, index) => {
+            if (index === 0) return;
+            const prev = slides[index - 1];
+
+            tl.to(prev, {
+              xPercent: -100,
+              duration: 0.6,
+              ease: "power2.inOut",
+            }).fromTo(
+              slide,
+              { xPercent: 100 },
+              {
+                xPercent: 0,
+                duration: 0.6,
+                ease: "power2.inOut",
+              },
+              "<"
+            );
+          });
+        }
       });
     }, section);
 
