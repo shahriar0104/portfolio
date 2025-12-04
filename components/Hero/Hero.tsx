@@ -1,19 +1,18 @@
 'use client';
 
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { useIsomorphicLayoutEffect } from "../../hooks/useIsomorphicLayoutEffect";
 import { fadeInUp } from "../../animations/fadeInUp";
 import { staggerReveal } from "../../animations/staggerReveal";
 import { parallaxScroll } from "../../animations/parallaxScroll";
-import { LazySplineLoader } from "../../animations/lazySplineLoader";
-import { useMagneticHover } from "../../hooks/useMagneticHover";
 import { gsap } from "../../animations/gsapConfig";
+import { RocketAnimation } from "../RocketAnimation";
+import { Copy, ArrowRight } from "lucide-react";
 
 export function Hero() {
   const heroRef = useRef<HTMLDivElement | null>(null);
-
-  const primaryCta = useMagneticHover(0.15);
-  const secondaryCta = useMagneticHover(0.1);
+  const availabilityRef = useRef<HTMLParagraphElement | null>(null);
+  const [copied, setCopied] = useState(false);
 
   useIsomorphicLayoutEffect(() => {
     if (!heroRef.current) return;
@@ -24,12 +23,48 @@ export function Hero() {
       staggerReveal(".hero-cta", { delay: 0.45, y: 24, stagger: 0.12 });
       parallaxScroll(".hero-content", { y: [0, -10] });
       parallaxScroll(".hero-background", { y: [0, -5] });
+
+      if (availabilityRef.current) {
+        gsap.to(availabilityRef.current, {
+          y: 8,
+          color: "#fb923c", // warm orange
+          textShadow: "0 0 18px rgba(248,113,113,0.85)",
+          duration: 1.6,
+          repeat: -1,
+          yoyo: true,
+          ease: "sine.inOut",
+        });
+      }
     }, heroRef);
 
     return () => {
       context.revert();
     };
   }, []);
+
+  const handleCopyEmail = () => {
+    const email = "swe.shadman@gmail.com";
+
+    if (navigator.clipboard && typeof navigator.clipboard.writeText === "function") {
+      navigator.clipboard.writeText(email).then(
+        () => setCopied(true),
+        () => setCopied(true)
+      );
+    } else {
+      const textarea = document.createElement("textarea");
+      textarea.value = email;
+      document.body.appendChild(textarea);
+      textarea.select();
+      try {
+        document.execCommand("copy");
+        setCopied(true);
+      } finally {
+        document.body.removeChild(textarea);
+      }
+    }
+
+    window.setTimeout(() => setCopied(false), 1500);
+  };
 
   const scrollToSection = (id: string) => {
     const element = document.getElementById(id);
@@ -53,53 +88,60 @@ export function Hero() {
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-accent-cyan/10 rounded-full blur-[120px] pointer-events-none" />
 
       <div className="hero-content container mx-auto px-6 md:px-8 lg:px-12 relative z-10">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-          <div className="space-y-8">
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-accent-cyan/30 bg-accent-cyan/5 text-xs font-mono tracking-[0.2em] uppercase">
-              <span className="w-2 h-2 rounded-full bg-accent-cyan animate-pulse" />
-              <span className="text-accent-cyan">Shadman Shahriar</span>
+        <div className="relative flex flex-col gap-10">
+          {/* Central big tagline over rocket animation background */}
+          <div className="relative flex items-center justify-center py-8">
+            <div className="absolute inset-x-0 -top-24 bottom-0 flex items-center justify-center pointer-events-none">
+              <div className="w-full max-w-[580px] opacity-80">
+                <RocketAnimation />
+              </div>
             </div>
+            <h1 className="hero-name relative z-10 text-4xl sm:text-5xl md:text-6xl lg:text-[4.8rem] xl:text-[5.4rem] font-bold tracking-[0.12em] text-white/80 text-center leading-[0.9] uppercase [font-family:var(--font-orbitron)]">
+              E2E COMPLEXITY
+              <br className="hidden sm:block" />
+              SIMPLIFIER
+            </h1>
+          </div>
 
+          {/* CTA + email on left, short description on right */}
+          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-8">
             <div className="space-y-4">
-              <h1 className="hero-name text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-display font-bold text-white leading-tight">
-                Software Engineer
-              </h1>
-              <p className="hero-role text-lg md:text-xl text-gray-300 max-w-xl">
-                I build intuitive interfaces, AI-driven systems, and scalable products.
-              </p>
-              <p className="hero-tagline text-sm md:text-base text-gray-400 max-w-xl">
-                From national-scale government platforms to AI-powered assistants, I design and ship systems that stay reliable under real-world load.
-              </p>
-            </div>
-
-            <div className="flex flex-wrap gap-4 pt-2">
               <button
-                ref={primaryCta.ref as React.RefObject<HTMLButtonElement>}
-                onMouseMove={primaryCta.onMouseMove}
-                onMouseLeave={primaryCta.onMouseLeave}
-                onClick={() => scrollToSection("projects")}
-                className="hero-cta relative px-8 py-3 bg-accent-cyan text-space-dark font-semibold rounded-full overflow-hidden transition-transform">
-                <span className="relative z-10">View Projects</span>
-                <span className="absolute inset-0 bg-gradient-to-r from-accent-cyan to-accent-purple opacity-0 group-hover:opacity-100" />
-              </button>
-
-              <button
-                ref={secondaryCta.ref as React.RefObject<HTMLButtonElement>}
-                onMouseMove={secondaryCta.onMouseMove}
-                onMouseLeave={secondaryCta.onMouseLeave}
                 onClick={() => scrollToSection("contact")}
-                className="hero-cta px-8 py-3 border border-accent-cyan/60 text-accent-cyan font-semibold rounded-full bg-transparent hover:bg-accent-cyan/10 transition-transform"
+                className="hero-cta group inline-flex items-center gap-3 rounded-full border border-neutral-700/80 bg-neutral-100/5 px-6 py-2.5 text-xs md:text-sm font-semibold text-neutral-50 backdrop-blur-sm"
               >
-                Contact
+                <span>Let&apos;s connect</span>
+                <ArrowRight className="w-3.5 h-3.5 transition-transform duration-200 group-hover:translate-x-1" />
               </button>
+
+              <div className="hero-cta flex items-center gap-3 text-xs md:text-sm text-neutral-400">
+                <button
+                  type="button"
+                  onClick={handleCopyEmail}
+                  className="inline-flex h-7 w-7 items-center justify-center rounded-full border border-neutral-700/80 bg-neutral-900/80 text-[0.7rem] hover:border-accent-cyan hover:text-accent-cyan transition-colors"
+                  aria-label={copied ? "Email copied" : "Copy email"}
+                >
+                  <Copy className="w-3.5 h-3.5" />
+                </button>
+                <span className="font-mono select-all">swe.shadman@gmail.com</span>
+                {copied && (
+                  <span className="text-[0.65rem] text-emerald-400">Copied</span>
+                )}
+              </div>
             </div>
+
+            <p className="hero-role max-w-md text-sm md:text-base text-gray-300 md:text-right [font-family:var(--font-space)]">
+              Shipping reliable, production-ready systems end-to-end.
+            </p>
           </div>
 
-          <div className="relative flex justify-center lg:justify-end">
-            <div className="w-64 h-64 sm:w-80 sm:h-80 lg:w-[420px] lg:h-[420px] floating">
-              <LazySplineLoader src="" title="Hero 3D" className="w-full h-full" />
-            </div>
-          </div>
+          {/* Availability line with heat shimmer effect under rocket */}
+          <p
+            ref={availabilityRef}
+            className="hero-tagline mt-2 text-[0.7rem] md:text-xs text-neutral-500 text-center"
+          >
+            Available now · Dhaka, Bangladesh · Remote projects welcome
+          </p>
         </div>
       </div>
     </section>

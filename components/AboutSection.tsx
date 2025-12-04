@@ -1,6 +1,7 @@
 'use client';
 
 import { useRef } from "react";
+import Image from "next/image";
 import type { ComponentType, SVGProps } from "react";
 import { useIsomorphicLayoutEffect } from "../hooks/useIsomorphicLayoutEffect";
 import { staggerReveal } from "../animations/staggerReveal";
@@ -217,8 +218,14 @@ export function AboutSection() {
             {/* About me card with image left and info right */}
             <div className="about-card h-[440px] rounded-[2.4rem] border border-neutral-800 bg-neutral-900/95 px-6 py-7 flex flex-col gap-5">
               <div className="grid grid-cols-1 md:grid-cols-[minmax(0,1.1fr)_minmax(0,1.5fr)] gap-5 items-center">
-                <div className="h-40 md:h-48 w-full rounded-[1.75rem] bg-neutral-800 flex items-center justify-center text-xs text-neutral-500">
-                  Photo
+                <div className="relative w-full max-w-[260px] mx-auto aspect-[3/4] rounded-[1.75rem] bg-neutral-800 overflow-hidden">
+                  <Image
+                    src="/profile.webp"
+                    alt="Shadman Shahriar profile"
+                    fill
+                    className="object-cover"
+                    priority
+                  />
                 </div>
                 <div className="text-left">
                   <h3 className="text-lg md:text-xl font-semibold text-neutral-50 mb-1">

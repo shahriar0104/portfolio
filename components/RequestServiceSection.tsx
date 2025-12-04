@@ -7,6 +7,24 @@ import { staggerReveal } from "../animations/staggerReveal";
 
 const services = [
   {
+    title: "Enterprise Platforms",
+    subtitle: "Long-lived systems",
+    description:
+      "Scalable, maintainable platforms for government and enterprise environments with many stakeholders.",
+  },
+  {
+    title: "Multi-tenant SaaS build",
+    subtitle: "One codebase, many customers",
+    description:
+      "Design and implement SaaS products with tenant isolation, billing, and admin controls baked in.",
+  },
+  {
+    title: "Legacy Modernisation",
+    subtitle: "From old stacks to new",
+    description:
+      "Gradual rewrites and refactors that respect existing users while moving towards a modern architecture.",
+  },
+  {
     title: "Intelligence Dashboards",
     subtitle: "Operational analytics",
     description:
@@ -19,22 +37,10 @@ const services = [
       "Design and integrate AI workflows that actually tie into your product and data, not just a chat box.",
   },
   {
-    title: "Enterprise Platforms",
-    subtitle: "Long-lived systems",
-    description:
-      "Scalable, maintainable platforms for government and enterprise environments with many stakeholders.",
-  },
-  {
     title: "System Audits & Performance",
     subtitle: "Stability & speed",
     description:
       "Deep dive into slow or fragile systems, with concrete recommendations and hands-on fixes.",
-  },
-  {
-    title: "Legacy Modernisation",
-    subtitle: "From old stacks to new",
-    description:
-      "Gradual rewrites and refactors that respect existing users while moving towards a modern architecture.",
   },
   {
     title: "Architecture Consulting",
@@ -131,12 +137,12 @@ export function RequestServiceSection() {
                       {service.description}
                     </p>
                   </div>
-                  <div className="mt-6 text-xs text-neutral-500">
+                  {/* <div className="mt-6 text-xs text-neutral-500">
                     <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-neutral-700/80 bg-neutral-900/80">
                       <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
                       Typical duration: 4–12 weeks
                     </span>
-                  </div>
+                  </div> */}
                 </div>
               ))}
             </div>

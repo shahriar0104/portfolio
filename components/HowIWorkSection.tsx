@@ -6,39 +6,9 @@ import { fadeInUp } from "../animations/fadeInUp";
 import { staggerReveal } from "../animations/staggerReveal";
 import { gsap } from "../animations/gsapConfig";
 import { getTechIcon } from "../lib/techIcons";
-
-const workCards = [
-  {
-    title: "Methodology",
-    description:
-      "Lightweight Agile delivery tuned for complex systems, with tight feedback loops and clear ownership.",
-    points: [
-      "Collaborative discovery and scoping",
-      "Short delivery cycles with visible progress",
-      "Clear docs, logs and handover",
-    ],
-  },
-  {
-    title: "Results",
-    description:
-      "Enterprise-grade outcomes for organisations that need reliability, observability and scale.",
-    points: [
-      "Government and national-scale platforms",
-      "Performance and latency improvements",
-      "Production-ready monitoring and tooling",
-    ],
-  },
-  {
-    title: "Capabilities",
-    description:
-      "From data-heavy backends to modern UIs, with AI where it creates real leverage.",
-    points: [
-      "AI-assisted workflows and assistants",
-      "Operational dashboards and reporting",
-      "End-to-end system design",
-    ],
-  },
-];
+import { Mail, Video, ShieldCheck, Zap, BarChart2 } from "lucide-react";
+import { SiSlack, SiAsana, SiTrello } from "react-icons/si";
+import { PiMicrosoftTeamsLogo } from "react-icons/pi";
 
 const capabilityStacks = [
   "Next.js",
@@ -102,30 +72,153 @@ export function HowIWorkSection() {
           </h2>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
-          {workCards.map((card) => (
-            <div
-              key={card.title}
-              className="how-card rounded-3xl border border-neutral-800 bg-neutral-900/80 px-6 py-6 md:px-7 md:py-7 flex flex-col justify-between"
-            >
+        {/* Row 1: Methodology + response guarantees */}
+        <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,2fr)_minmax(0,1.2fr)] gap-6 md:gap-8 mb-8">
+          {/* Methodology card */}
+          <div className="how-card rounded-3xl border border-neutral-800 bg-neutral-900/80 px-6 py-6 md:px-7 md:py-7 flex flex-col justify-between">
+            <div>
+              <p className="text-xs tracking-[0.25em] uppercase text-neutral-400 mb-2">
+                METHODOLOGY
+              </p>
+              <p className="text-sm text-neutral-300 mb-5 max-w-md">
+                I use lightweight Agile delivery designed for SMEs and product teams, and I&apos;m
+                available in the channels you already use.
+              </p>
+
+              <div className="grid grid-cols-3 gap-4 mb-5">
+                {/* Email */}
+                <div className="flex flex-col items-center justify-center gap-2 rounded-2xl border border-neutral-800 bg-neutral-950/80 px-3 py-4">
+                  <span className="flex h-10 w-10 items-center justify-center rounded-2xl bg-[#1B140A]">
+                    <Mail className="w-5 h-5 text-yellow-400" />
+                  </span>
+                  <span className="text-xs font-medium">Email</span>
+                </div>
+                {/* Video */}
+                <div className="flex flex-col items-center justify-center gap-2 rounded-2xl border border-neutral-800 bg-neutral-950/80 px-3 py-4">
+                  <span className="flex h-10 w-10 items-center justify-center rounded-2xl bg-[#07151B]">
+                    <Video className="w-5 h-5 text-sky-400" />
+                  </span>
+                  <span className="text-xs font-medium">Video</span>
+                </div>
+                {/* Teams */}
+                <div className="flex flex-col items-center justify-center gap-2 rounded-2xl border border-neutral-800 bg-neutral-950/80 px-3 py-4">
+                  <span className="flex h-10 w-10 items-center justify-center rounded-2xl bg-[#140E1F]">
+                    <PiMicrosoftTeamsLogo className="w-5 h-5 text-[#5B5FC7]" />
+                  </span>
+                  <span className="text-xs font-medium">Teams</span>
+                </div>
+                {/* Slack */}
+                <div className="flex flex-col items-center justify-center gap-2 rounded-2xl border border-neutral-800 bg-neutral-950/80 px-3 py-4">
+                  <span className="flex h-10 w-10 items-center justify-center rounded-2xl bg-[#11141B]">
+                    <SiSlack className="w-5 h-5 text-[#36C5F0]" />
+                  </span>
+                  <span className="text-xs font-medium">Slack</span>
+                </div>
+                {/* Asana */}
+                <div className="flex flex-col items-center justify-center gap-2 rounded-2xl border border-neutral-800 bg-neutral-950/80 px-3 py-4">
+                  <span className="flex h-10 w-10 items-center justify-center rounded-2xl bg-[#1A1117]">
+                    <SiAsana className="w-5 h-5 text-[#F06A6A]" />
+                  </span>
+                  <span className="text-xs font-medium">Asana</span>
+                </div>
+                {/* Trello */}
+                <div className="flex flex-col items-center justify-center gap-2 rounded-2xl border border-neutral-800 bg-neutral-950/80 px-3 py-4">
+                  <span className="flex h-10 w-10 items-center justify-center rounded-2xl bg-[#061824]">
+                    <SiTrello className="w-5 h-5 text-[#0284FF]" />
+                  </span>
+                  <span className="text-xs font-medium">Trello</span>
+                </div>
+              </div>
+            </div>
+
+            <button className="mt-2 inline-flex items-center justify-center rounded-full border border-neutral-600/80 bg-neutral-950/80 px-6 py-2 text-xs md:text-sm font-semibold tracking-[0.18em] uppercase">
+              Request channel
+            </button>
+          </div>
+
+          {/* Response guarantee cards */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-1 gap-4">
+            {[
+              {
+                label: "1HR",
+                level: "Critical",
+                color: "text-red-500",
+              },
+              {
+                label: "4HRS",
+                level: "Urgent",
+                color: "text-amber-400",
+              },
+              {
+                label: "24HRS",
+                level: "Routine",
+                color: "text-emerald-400",
+              },
+            ].map((sla) => (
+              <div
+                key={sla.label}
+                className="how-card flex flex-col justify-between rounded-3xl border border-neutral-800 bg-neutral-950/80 px-5 py-5"
+              >
+                <div>
+                  <p className="text-xl md:text-2xl font-semibold tracking-[0.2em] mb-2">
+                    {sla.label}
+                  </p>
+                  <p className={`text-sm font-semibold ${sla.color}`}>{sla.level}</p>
+                </div>
+                <p className="mt-4 text-xs text-neutral-400">Response guarantee</p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Row 2: Results / Secure / Fast */}
+        <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,2fr)_minmax(0,1.4fr)] gap-6 md:gap-8">
+          {/* Results card */}
+          <div className="how-card rounded-3xl border border-neutral-800 bg-neutral-900/80 px-6 py-6 md:px-7 md:py-7 flex items-center gap-6">
+            <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-b from-sky-500/80 to-sky-300/80">
+              <BarChart2 className="w-7 h-7 text-black/90" />
+            </div>
+            <div>
+              <p className="text-xs tracking-[0.25em] uppercase text-neutral-400 mb-1">
+                RESULTS
+              </p>
+              <p className="text-sm text-neutral-300 max-w-md">
+                Enterprise solutions that drive measurable results across operations, reporting, and
+                decision-making.
+              </p>
+            </div>
+          </div>
+
+          {/* Secure + Fast cards */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="how-card rounded-3xl border border-neutral-800 bg-neutral-900/80 px-6 py-6 flex flex-col gap-3">
+              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-500/10">
+                <ShieldCheck className="w-6 h-6 text-emerald-400" />
+              </div>
               <div>
-                <h3 className="text-lg md:text-xl font-semibold mb-3">
-                  {card.title}
-                </h3>
-                <p className="text-sm text-neutral-400 mb-4">
-                  {card.description}
+                <p className="text-xs tracking-[0.25em] uppercase text-neutral-300 mb-1">
+                  SECURE
+                </p>
+                <p className="text-sm text-neutral-400">
+                  Enterprise-grade authentication and access control in every integration.
                 </p>
               </div>
-              <ul className="space-y-2 text-sm text-neutral-300">
-                {card.points.map((point) => (
-                  <li key={point} className="flex gap-2 items-start">
-                    <span className="mt-1 h-1 w-1 rounded-full bg-neutral-500" />
-                    <span>{point}</span>
-                  </li>
-                ))}
-              </ul>
             </div>
-          ))}
+
+            <div className="how-card rounded-3xl border border-neutral-800 bg-neutral-900/80 px-6 py-6 flex flex-col gap-3">
+              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-yellow-400/10">
+                <Zap className="w-6 h-6 text-yellow-400" />
+              </div>
+              <div>
+                <p className="text-xs tracking-[0.25em] uppercase text-neutral-300 mb-1">
+                  FAST
+                </p>
+                <p className="text-sm text-neutral-400">
+                  6 to 12 week turnaround that ships quality solutions, not endless prototypes.
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
 
         <div className="mt-10 md:mt-14">

@@ -51,7 +51,7 @@ export function Navigation() {
 
   return (
     <nav className="fixed top-6 left-0 right-0 z-40 flex justify-center pointer-events-none">
-      <div className="pointer-events-auto inline-flex items-center gap-1 rounded-full border border-neutral-700 bg-neutral-900/90 px-3 py-2 shadow-[0_0_0_1px_rgba(255,255,255,0.02)]">
+      <div className="pointer-events-auto inline-flex items-center gap-1 rounded-full border border-white/10 bg-neutral-900/40 px-3 py-2 backdrop-blur-xl shadow-[0_0_0_1px_rgba(255,255,255,0.04)]">
         {navItems.map((item) => {
           const isActive = activeId === item.id;
           return (
