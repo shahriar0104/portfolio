@@ -1,5 +1,6 @@
-'use client';
+"use client";
 
+import Image from "next/image";
 import { useRef } from "react";
 import { useIsomorphicLayoutEffect } from "../hooks/useIsomorphicLayoutEffect";
 import { gsap } from "../animations/gsapConfig";
@@ -20,6 +21,11 @@ const caseStudies = [
     impact:
       "Cleaner preparation flows, better traceability of decisions, and a backend ready for future automation.",
     stack: ["Next.js", "TypeScript", "Express.js", "Prisma", "PostgreSQL", "Supabase"],
+    images: [
+      "/case-studies/board-smith-1.png",
+      "/case-studies/board-smith-2.png",
+      "/case-studies/board-smith-3.png",
+    ],
   },
   {
     id: "ieims",
@@ -33,6 +39,11 @@ const caseStudies = [
     impact:
       "Supports millions of students with reliable reporting and operational tooling for exam sessions.",
     stack: ["Next.js", "TypeScript", "Monorepo", "Custom UI Library"],
+    images: [
+      "/case-studies/ieims-1.png",
+      "/case-studies/ieims-2.png",
+      "/case-studies/ieims-3.png",
+    ],
   },
 ];
 
@@ -44,9 +55,53 @@ export function CaseStudiesSection() {
     const section = sectionRef.current;
 
     const ctx = gsap.context(() => {
-      pinScrollSection(section, { start: "top top", end: "+=150%", scrub: true });
+      const pinEnd = "+=" + 200 * caseStudies.length + "%";
+
+      pinScrollSection(section, { start: "top top", end: pinEnd, scrub: true });
       fadeInUp(".case-heading", { y: 40 });
       fadeInUp(".case-main", { delay: 0.2, y: 40 });
+
+      const visuals = gsap.utils.toArray<HTMLElement>(".case-visual");
+      visuals.forEach((visual) => {
+        const slides = visual.querySelectorAll<HTMLElement>(".case-visual-slide");
+        if (!slides.length || slides.length === 1) return;
+
+        // Start with the first slide in view, others positioned to the right.
+        gsap.set(slides, { xPercent: 100 });
+        gsap.set(slides[0], { xPercent: 0 });
+
+        const tl = gsap.timeline({
+          scrollTrigger: {
+            trigger: visual,
+            // Start transitions only after the section is pinned:
+            // first when the visual's top reaches the viewport top,
+            // then progress until its bottom leaves the top.
+            start: "top top",
+            end: "bottom top",
+            scrub: true,
+          },
+        });
+
+        slides.forEach((slide, index) => {
+          if (index === 0) return;
+          const prev = slides[index - 1];
+
+          tl.to(prev, {
+            xPercent: -100,
+            duration: 0.6,
+            ease: "power2.inOut",
+          }).fromTo(
+            slide,
+            { xPercent: 100 },
+            {
+              xPercent: 0,
+              duration: 0.6,
+              ease: "power2.inOut",
+            },
+            "<"
+          );
+        });
+      });
     }, section);
 
     return () => ctx.revert();
@@ -74,8 +129,27 @@ export function CaseStudiesSection() {
             className="case-main mb-16 last:mb-0 grid grid-cols-1 lg:grid-cols-[minmax(0,1.7fr)_minmax(0,1.1fr)] gap-8 items-start"
           >
             <div className="rounded-3xl border border-neutral-800 bg-neutral-900/80 overflow-hidden aspect-[16/9]">
-              <div className="w-full h-full bg-gradient-to-br from-neutral-800 via-neutral-900 to-black flex items-center justify-center text-xs text-neutral-500">
-                Project visuals go here
+              <div className="case-visual relative w-full h-full bg-gradient-to-br from-neutral-800 via-neutral-900 to-black">
+                {study.images && study.images.length > 0 ? (
+                  study.images.map((src, index) => (
+                    <div
+                      key={src}
+                      className="case-visual-slide absolute inset-0 flex items-center justify-center"
+                    >
+                      <Image
+                        src={src}
+                        alt={`${study.title} screen ${index + 1}`}
+                        fill
+                        sizes="(min-width: 1024px) 60vw, 100vw"
+                        className="object-cover"
+                      />
+                    </div>
+                  ))
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center text-xs text-neutral-500">
+                    Project visuals go here
+                  </div>
+                )}
               </div>
             </div>
 
