@@ -37,11 +37,29 @@ const caseStudies = [
       "Monorepo-based frontend with custom component library, serving multiple high-stakes modules.",
     impact:
       "Supports millions of students with reliable reporting and operational tooling for exam sessions.",
-    stack: ["Next.js", "TypeScript", "Monorepo", "Custom UI Library"],
+    stack: ["Spring Boot", "Next.js", "SQL Server", "Monorepo", "Custom UI Library", "Kubernetes",],
     images: [
       "/case-studies/ieims-1.png",
       "/case-studies/ieims-2.png",
       "/case-studies/ieims-3.png",
+    ],
+  },
+  {
+    id: "rjsc",
+    title: "RJSC – Register of Joint Stock Companies & Firms",
+    role: "Core feature developer",
+    timeframe: "Multi-year rollout",
+    problem:
+      "Company registration and lifecycle changes involve complex rules, manual verification, and multiple government systems.",
+    solution:
+      "End-to-end registration and compliance system covering name clearance, company registration, back-office validation, annual filing, and lifecycle changes with deep API integrations.",
+    impact:
+      "Handles all major company types (private, public, one-person, partnership, foreign) plus business name clearance, annual filings, share changes, address updates and more in a single reliable workflow.",
+    stack: ["Spring MVC", "Thymeleaf", "Oracle", "Docker", "3rd Prty APIs"],
+    images: [
+      "/case-studies/rjsc-1.png",
+      "/case-studies/rjsc-2.png",
+      "/case-studies/rjsc-3.png",
     ],
   },
 ];

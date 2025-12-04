@@ -199,14 +199,14 @@ export function AboutSection() {
                     return (
                       <div
                         key={exp.label + exp.detail}
-                        className="rounded-2xl border border-neutral-800 bg-black/80 px-4 py-4 flex items-start gap-3"
+                        className="rounded-2xl border border-neutral-800/80 bg-black/80 px-4 py-4 flex flex-col items-center gap-3"
                       >
-                        <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-neutral-900 text-neutral-100">
-                          <Icon className="w-4 h-4" />
+                        <span className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-emerald-400/25 via-cyan-400/15 to-purple-500/35 text-emerald-300 shadow-[0_0_0_1px_rgba(148,163,184,0.5)]">
+                          <Icon className="w-8 h-8" />
                         </span>
-                        <div className="text-xs text-neutral-200">
-                          <p className="font-medium mb-0.5">{exp.label}</p>
-                          <p className="text-[0.72rem] text-neutral-400">{exp.detail}</p>
+                        <div className="text-xs text-neutral-200 space-y-0.5 text-center">
+                          <p className="font-medium leading-snug">{exp.label}</p>
+                          <p className="text-[0.72rem] text-neutral-400 leading-snug">{exp.detail}</p>
                         </div>
                       </div>
                     );

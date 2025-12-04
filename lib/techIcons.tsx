@@ -24,7 +24,26 @@ import {
   SiLinux,
   SiRender,
   SiWasabi,
+  SiThymeleaf,
 } from "react-icons/si";
+
+const CurlyBracesIcon: IconType = ({ color, className }) => (
+  <span style={{ color }} className={className}>
+    {"{}"}
+  </span>
+);
+
+const SqlServerIcon: IconType = ({ color, className }) => (
+  <span style={{ color }} className={className}>
+    SQL
+  </span>
+);
+
+const UiLibraryIcon: IconType = ({ color, className }) => (
+  <span style={{ color }} className={className}>
+    UI
+  </span>
+);
 
 type TechIconMeta = {
   icon: IconType;
@@ -42,6 +61,8 @@ const map: Record<string, TechIconMeta> = {
   "Node.js": { icon: SiNodedotjs, color: "#3C873A" },
   "Spring Boot": { icon: SiSpringboot, color: "#6DB33F" },
   "Spring MVC": { icon: SiSpringboot, color: "#6DB33F" },
+  Thymeleaf: { icon: SiThymeleaf, color: "#005F0F" },
+  "SQL Server": { icon: SqlServerIcon, color: "#CC2927" },
   PostgreSQL: { icon: SiPostgresql, color: "#336791" },
   Oracle: { icon: SiOracle, color: "#F80000" },
   MySQL: { icon: SiMysql, color: "#00758F" },
@@ -51,9 +72,12 @@ const map: Record<string, TechIconMeta> = {
   Kubernetes: { icon: SiKubernetes, color: "#326CE5" },
   Vercel: { icon: SiVercel, color: "#ffffff" },
   Git: { icon: SiGit, color: "#F05032" },
+  Monorepo: { icon: SiGit, color: "#F05032" },
   "Linux / Debian": { icon: SiLinux, color: "#D70A53" },
   Wasabi: { icon: SiWasabi, color: "#78A83B" },
   Render: { icon: SiRender, color: "#46E3B7" },
+  "Custom UI Library": { icon: UiLibraryIcon, color: "#6366F1" },
+  "3rd Prty APIs": { icon: CurlyBracesIcon, color: "#F97316" },
 };
 
 export function getTechIcon(name: string): ReactNode | null {
