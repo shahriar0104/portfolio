@@ -7,6 +7,7 @@ import {
   JetBrains_Mono,
   Orbitron,
 } from "next/font/google";
+import { ScrollEngine } from "../components/ScrollEngine";
 
 const bricolage = Bricolage_Grotesque({
   subsets: ["latin"],
@@ -48,7 +49,9 @@ export default function RootLayout({
       lang="en"
       className={`${bricolage.variable} ${spaceGrotesque.variable} ${jetbrainsMono.variable} ${orbitron.variable}`}
     >
-      <body>{children}</body>
+      <body>
+        <ScrollEngine>{children}</ScrollEngine>
+      </body>
     </html>
   );
 }
