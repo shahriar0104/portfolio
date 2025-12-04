@@ -92,6 +92,93 @@ const caseStudies = [
   },
 ];
 
+function IeimsFlowVisual() {
+  return (
+    <div className="absolute inset-0 flex items-center justify-center">
+      <div className="relative w-[min(360px,100%)] aspect-square">
+        <div className="absolute inset-[-15%] rounded-full bg-[radial-gradient(circle_at_center,rgba(45,212,191,0.22),transparent_65%)]" />
+        <div className="absolute inset-[18%] rounded-full border border-cyan-500/25" />
+
+        {/* CDR - Straight line upward - from center to CDR module */}
+        <div className="ieims-link ieims-link-cdr absolute left-1/2 top-[3%] -translate-x-1/2 h-[47%] w-[2px] bg-gradient-to-b from-cyan-400/90 via-cyan-400/50 to-transparent" />
+
+        {/* REG - Straight line to the right - only to the left edge of REG pill */}
+        <div className="ieims-link ieims-link-reg absolute left-1/2 top-1/2 -translate-y-1/2 h-[2px] w-[46%] bg-gradient-to-r from-transparent via-emerald-400/50 to-emerald-400/90" />
+
+        {/* EAP - Straight line to the left - only to the right edge of EAP pill */}
+        <div className="ieims-link ieims-link-eap absolute right-1/2 top-1/2 -translate-y-1/2 h-[2px] w-[46%] bg-gradient-to-l from-transparent via-emerald-400/50 to-emerald-400/90" />
+
+        {/* FFU - Curved SVG path to bottom-right */}
+        <svg className="ieims-link ieims-link-ffu absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 100 100">
+          <defs>
+            <linearGradient id="ffu-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="rgb(56, 189, 248)" stopOpacity="0" />
+              <stop offset="50%" stopColor="rgb(56, 189, 248)" stopOpacity="0.7" />
+              <stop offset="100%" stopColor="rgb(56, 189, 248)" stopOpacity="0.95" />
+            </linearGradient>
+          </defs>
+          <path
+            id="ffu-path"
+            d="M 50 50 Q 70 65, 82 90"
+            stroke="url(#ffu-gradient)"
+            strokeWidth="2"
+            fill="none"
+            vectorEffect="non-scaling-stroke"
+          />
+        </svg>
+
+        {/* PMC - Curved SVG path to bottom-left */}
+        <svg className="ieims-link ieims-link-pmc absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 100 100">
+          <defs>
+            <linearGradient id="pmc-gradient" x1="100%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stopColor="rgb(129, 140, 248)" stopOpacity="0" />
+              <stop offset="50%" stopColor="rgb(129, 140, 248)" stopOpacity="0.7" />
+              <stop offset="100%" stopColor="rgb(129, 140, 248)" stopOpacity="0.95" />
+            </linearGradient>
+          </defs>
+          <path
+            id="pmc-path"
+            d="M 50 50 Q 30 65, 18 90"
+            stroke="url(#pmc-gradient)"
+            strokeWidth="2"
+            fill="none"
+            vectorEffect="non-scaling-stroke"
+          />
+        </svg>
+
+        <div className="ieims-node ieims-node-master absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-2xl px-4 py-3 bg-black/80 border border-emerald-400/50 shadow-[0_0_0_1px_rgba(16,185,129,0.4)] flex flex-col items-center gap-1 text-xs">
+          <span className="text-[0.6rem] uppercase tracking-[0.28em] text-emerald-300/80">
+            Core
+          </span>
+          <span className="text-sm font-semibold text-emerald-100">Masterdata</span>
+        </div>
+
+        <div className="ieims-node ieims-node-cdr absolute left-1/2 top-[3%] -translate-x-1/2 rounded-2xl px-3 py-1.5 bg-black/80 border border-cyan-500/60 text-[0.7rem] font-medium text-cyan-100 shadow-[0_0_0_1px_rgba(59,130,246,0.45)]">
+          CDR
+        </div>
+        <div className="ieims-node ieims-node-reg absolute right-[4%] top-1/2 -translate-y-1/2 rounded-2xl px-3 py-1.5 bg-black/80 border border-emerald-500/60 text-[0.7rem] font-medium text-emerald-100 shadow-[0_0_0_1px_rgba(16,185,129,0.45)]">
+          REG
+        </div>
+        <div className="ieims-node ieims-node-ffu absolute right-[10%] bottom-[6%] rounded-2xl px-3 py-1.5 bg-black/80 border border-sky-500/60 text-[0.7rem] font-medium text-sky-100 shadow-[0_0_0_1px_rgba(56,189,248,0.45)]">
+          FFU
+        </div>
+        <div className="ieims-node ieims-node-pmc absolute left-[10%] bottom-[6%] rounded-2xl px-3 py-1.5 bg-black/80 border border-violet-500/60 text-[0.7rem] font-medium text-violet-100 shadow-[0_0_0_1px_rgba(129,140,248,0.5)]">
+          PMC
+        </div>
+        <div className="ieims-node ieims-node-eap absolute left-[4%] top-1/2 -translate-y-1/2 rounded-2xl px-3 py-1.5 bg-black/80 border border-emerald-500/60 text-[0.7rem] font-medium text-emerald-100 shadow-[0_0_0_1px_rgba(16,185,129,0.45)]">
+          EAP
+        </div>
+
+        <div className="ieims-spark ieims-spark-cdr absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full bg-cyan-300 shadow-[0_0_16px_rgba(34,211,238,0.9)]" />
+        <div className="ieims-spark ieims-spark-reg absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full bg-emerald-300 shadow-[0_0_16px_rgba(16,185,129,0.9)]" />
+        <div className="ieims-spark ieims-spark-ffu absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full bg-sky-300 shadow-[0_0_16px_rgba(56,189,248,0.9)]" />
+        <div className="ieims-spark ieims-spark-pmc absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full bg-violet-300 shadow-[0_0_16px_rgba(129,140,248,0.9)]" />
+        <div className="ieims-spark ieims-spark-eap absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full bg-emerald-300 shadow-[0_0_16px_rgba(16,185,129,0.9)]" />
+      </div>
+    </div>
+  );
+}
+
 export function CaseStudiesSection() {
   const sectionRef = useRef<HTMLElement | null>(null);
 
@@ -109,6 +196,140 @@ export function CaseStudiesSection() {
       cases.forEach((caseEl) => {
         const visual = caseEl.querySelector<HTMLElement>(".case-visual");
         if (!visual) return;
+
+        const caseId = caseEl.dataset.caseId;
+
+        if (caseId === "ieims") {
+          const nodes = visual.querySelectorAll<HTMLElement>(".ieims-node");
+          const links = visual.querySelectorAll<HTMLElement>(".ieims-link");
+
+          const sparksConfig: Record<
+            "cdr" | "reg" | "ffu" | "pmc" | "eap",
+            { x: number; y: number }
+          > = {
+            cdr: { x: 0, y: -80 },
+            reg: { x: 80, y: 0 },
+            ffu: { x: 60, y: 70 },
+            pmc: { x: -60, y: 70 },
+            eap: { x: -80, y: 0 },
+          };
+
+          gsap.set(nodes, { opacity: 0.35, scale: 0.92 });
+          gsap.set(links, { opacity: 0.12 });
+          gsap.set(visual.querySelectorAll<HTMLElement>(".ieims-spark"), {
+            opacity: 0,
+            x: 0,
+            y: 0,
+          });
+
+          const modules = ["cdr", "reg", "ffu", "pmc", "eap"] as const;
+          const steps = 1 + modules.length;
+
+          const tl = gsap.timeline({
+            scrollTrigger: {
+              trigger: caseEl,
+              start: "center center",
+              end: "+=" + steps * 90 + "%",
+              scrub: true,
+              pin: true,
+              anticipatePin: 1,
+            },
+          });
+
+          const master = visual.querySelector<HTMLElement>(".ieims-node-master");
+          if (master) {
+            tl.to(master, {
+              opacity: 1,
+              scale: 1,
+              boxShadow: "0 0 32px rgba(16,185,129,0.7)",
+              duration: 1,
+              ease: "none",
+            });
+          }
+
+          modules.forEach((key) => {
+            const node = visual.querySelector<HTMLElement>(`.ieims-node-${key}`);
+            const link = visual.querySelector<HTMLElement>(`.ieims-link-${key}`);
+            const spark = visual.querySelector<HTMLElement>(`.ieims-spark-${key}`);
+            const path = visual.querySelector<SVGPathElement>(`#${key}-path`);
+            const sparkDelta = sparksConfig[key];
+
+            if (!node || !link || !spark) return;
+
+            // Use MotionPath for FFU and PMC (SVG paths), x/y for others (div lines)
+            if (path && (key === 'ffu' || key === 'pmc')) {
+              tl.to(spark, {
+                opacity: 1,
+                motionPath: {
+                  path: path,
+                  align: path,
+                  alignOrigin: [0.5, 0.5],
+                },
+                duration: 0.8,
+                ease: "power2.out",
+              })
+                .to(
+                  link,
+                  {
+                    opacity: 0.9,
+                    duration: 0.8,
+                    ease: "power1.out",
+                  },
+                  "<"
+                )
+                .to(
+                  node,
+                  {
+                    opacity: 1,
+                    scale: 1,
+                    duration: 0.8,
+                    ease: "power1.out",
+                  },
+                  "<"
+                )
+                .to(spark, {
+                  opacity: 0,
+                  duration: 0.4,
+                  ease: "power1.out",
+                });
+            } else {
+              // For CDR, REG, EAP - use simple x/y translation
+              tl.to(spark, {
+                opacity: 1,
+                x: sparkDelta.x,
+                y: sparkDelta.y,
+                duration: 0.8,
+                ease: "power2.out",
+              })
+                .to(
+                  link,
+                  {
+                    opacity: 0.9,
+                    duration: 0.8,
+                    ease: "power1.out",
+                  },
+                  "<"
+                )
+                .to(
+                  node,
+                  {
+                    opacity: 1,
+                    scale: 1,
+                    duration: 0.8,
+                    ease: "power1.out",
+                  },
+                  "<"
+                )
+                .to(spark, {
+                  opacity: 0,
+                  duration: 0.4,
+                  ease: "power1.out",
+                });
+            }
+          });
+
+          return;
+        }
 
         const slides = visual.querySelectorAll<HTMLElement>(".case-visual-slide");
         if (!slides.length || slides.length === 1) return;
@@ -247,11 +468,14 @@ export function CaseStudiesSection() {
         {caseStudies.map((study) => (
           <div
             key={study.id}
+            data-case-id={study.id}
             className="case-main mb-16 last:mb-0 grid grid-cols-1 lg:grid-cols-[minmax(0,1.7fr)_minmax(0,1.1fr)] gap-8 items-start"
           >
             <div className="rounded-3xl border border-neutral-800 bg-neutral-900/80 overflow-hidden aspect-[16/9]">
               <div className="case-visual relative w-full h-full bg-gradient-to-br from-neutral-800 via-neutral-900 to-black">
-                {study.images && study.images.length > 0 ? (
+                {study.id === "ieims" ? (
+                  <IeimsFlowVisual />
+                ) : study.images && study.images.length > 0 ? (
                   study.images.map((src, index) => (
                     <div
                       key={src}
