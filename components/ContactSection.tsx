@@ -145,7 +145,7 @@ export function ContactSection() {
                                     <input
                                         type="text"
                                         name="name"
-                                        className="w-full rounded-xl border border-neutral-800 bg-black px-3 py-2 text-sm outline-none focus:border-neutral-500"
+                                        className="w-full rounded-xl border border-neutral-600 bg-black px-3 py-2 text-sm outline-none focus:border-neutral-300"
                                         placeholder="John Doe"
                                     />
                                 </div>
@@ -156,7 +156,7 @@ export function ContactSection() {
                                     <input
                                         type="email"
                                         name="email"
-                                        className="w-full rounded-xl border border-neutral-800 bg-black px-3 py-2 text-sm outline-none focus:border-neutral-500"
+                                        className="w-full rounded-xl border border-neutral-600 bg-black px-3 py-2 text-sm outline-none focus:border-neutral-300"
                                         placeholder="john@example.com"
                                     />
                                 </div>
@@ -168,7 +168,7 @@ export function ContactSection() {
                                 </label>
                                 <textarea
                                     name="message"
-                                    className="w-full min-h-[120px] rounded-xl border border-neutral-800 bg-black px-3 py-2 text-sm resize-none outline-none focus:border-neutral-500"
+                                    className="w-full min-h-[120px] rounded-xl border border-neutral-600 bg-black px-3 py-2 text-sm resize-none outline-none focus:border-neutral-300"
                                     placeholder="Tell me about your project..."
                                 />
                             </div>

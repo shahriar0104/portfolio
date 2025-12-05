@@ -7,12 +7,14 @@ import { staggerReveal } from "../../animations/staggerReveal";
 import { parallaxScroll } from "../../animations/parallaxScroll";
 import { gsap } from "../../animations/gsapConfig";
 import { RocketAnimation } from "../RocketAnimation";
+import { useContactDialog } from "../ContactDialogProvider";
 import { Copy, ArrowRight } from "lucide-react";
 
 export function Hero() {
   const heroRef = useRef<HTMLDivElement | null>(null);
   const availabilityRef = useRef<HTMLParagraphElement | null>(null);
   const [copied, setCopied] = useState(false);
+  const { open } = useContactDialog();
 
   useIsomorphicLayoutEffect(() => {
     if (!heroRef.current) return;
@@ -107,7 +109,7 @@ export function Hero() {
           <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-8">
             <div className="space-y-4">
               <button
-                onClick={() => scrollToSection("contact")}
+                onClick={() => open()}
                 className="hero-cta group inline-flex items-center gap-3 rounded-full border border-neutral-700/80 bg-neutral-100/5 px-6 py-2.5 text-xs md:text-sm font-semibold text-neutral-50 backdrop-blur-sm"
               >
                 <span>Let&apos;s connect</span>

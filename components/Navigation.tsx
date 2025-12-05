@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { useContactDialog } from './ContactDialogProvider';
 
 const navItems = [
   { id: 'home', label: 'Home' },
@@ -13,6 +14,7 @@ const navItems = [
 
 export function Navigation() {
   const [activeId, setActiveId] = useState<string>('home');
+  const { open } = useContactDialog();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -57,7 +59,7 @@ export function Navigation() {
           return (
             <button
               key={item.id}
-              onClick={() => scrollToSection(item.id)}
+              onClick={() => (item.id === 'contact' ? open() : scrollToSection(item.id))}
               className={`relative px-4 py-1.5 text-xs md:text-sm rounded-full transition-colors duration-200 ${
                 isActive
                   ? 'bg-neutral-100 text-black'

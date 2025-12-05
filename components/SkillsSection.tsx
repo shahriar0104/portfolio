@@ -6,6 +6,7 @@ import { staggerReveal } from "../animations/staggerReveal";
 import { gsap } from "../animations/gsapConfig";
 import { Code2, Database, Cloud, Layers, Terminal } from "lucide-react";
 import { getTechIcon } from "../lib/techIcons";
+import { useContactDialog } from "./ContactDialogProvider";
 
 const skills = [
   { name: "Next.js", group: "Frontend" },
@@ -51,6 +52,7 @@ const groupIcon = (group: string) => {
 
 export function SkillsSection() {
   const sectionRef = useRef<HTMLElement | null>(null);
+  const { open } = useContactDialog();
 
   useIsomorphicLayoutEffect(() => {
     if (!sectionRef.current) return;
@@ -104,15 +106,7 @@ export function SkillsSection() {
             <span>Don&apos;t see your stack? </span>
             <button
               type="button"
-              onClick={() => {
-                const el = document.getElementById('contact');
-                const lenis = (window as any).__lenis;
-                if (el && lenis) {
-                  lenis.scrollTo(el);
-                } else if (el) {
-                  el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                }
-              }}
+              onClick={() => open()}
               className="underline underline-offset-4 decoration-neutral-500 hover:text-white hover:decoration-neutral-300"
             >
               Let&apos;s talk
