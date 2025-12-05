@@ -18,7 +18,6 @@ export function ScrollEngine({ children }: ScrollEngineProps) {
     const lenis = new Lenis({
       lerp: 0.1,
       smoothWheel: true,
-      smoothTouch: false,
       wheelMultiplier: 1,
     });
 
@@ -39,7 +38,7 @@ export function ScrollEngine({ children }: ScrollEngineProps) {
     return () => {
       window.cancelAnimationFrame(animationFrameId);
       lenis.destroy();
-      ScrollTrigger.kill();
+      ScrollTrigger.killAll();
     };
   }, []);
 
