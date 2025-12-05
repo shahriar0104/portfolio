@@ -11,7 +11,7 @@ interface ParallaxScrollOptions {
 }
 
 export function parallaxScroll(
-  target: gsap.TweenTarget,
+  target: string | Element,
   options: ParallaxScrollOptions = {}
 ) {
   const {
@@ -31,7 +31,7 @@ export function parallaxScroll(
       yPercent: y[1],
       ease: "none",
       scrollTrigger: {
-        trigger: trigger ?? target,
+        trigger: (trigger as ScrollTrigger.Vars["trigger"]) ?? (target as ScrollTrigger.Vars["trigger"]),
         start,
         end,
         scrub,
