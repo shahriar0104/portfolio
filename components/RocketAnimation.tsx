@@ -1,15 +1,67 @@
 'use client';
-import { motion } from 'framer-motion';
+
+import { useRef } from "react";
+import { useIsomorphicLayoutEffect } from "../hooks/useIsomorphicLayoutEffect";
+import { gsap } from "../animations/gsapConfig";
 
 export function RocketAnimation() {
+  const rootRef = useRef<HTMLDivElement | null>(null);
+
+  useIsomorphicLayoutEffect(() => {
+    if (!rootRef.current) return;
+
+    const ctx = gsap.context(() => {
+      gsap.fromTo(
+        ".rocket-svg",
+        { y: 20, opacity: 0 },
+        { y: 0, opacity: 1, duration: 1, ease: "power2.out" }
+      );
+
+      gsap.to(".rocket-flame-main", {
+        scaleY: 1.2,
+        opacity: 1,
+        duration: 0.3,
+        repeat: -1,
+        yoyo: true,
+        ease: "sine.inOut",
+      });
+
+      gsap.to(".rocket-flame-flicker", {
+        scaleY: 1.1,
+        opacity: 0.9,
+        duration: 0.2,
+        repeat: -1,
+        yoyo: true,
+        ease: "sine.inOut",
+        delay: 0.1,
+      });
+
+      const particles = gsap.utils.toArray<HTMLDivElement>(".rocket-particle");
+      particles.forEach((particle, index) => {
+        gsap.fromTo(
+          particle,
+          { y: 0, opacity: 1, scale: 1 },
+          {
+            y: 100,
+            opacity: 0,
+            scale: 0.5,
+            duration: 0.8,
+            repeat: -1,
+            ease: "power1.out",
+            delay: index * 0.1,
+          }
+        );
+      });
+    }, rootRef);
+
+    return () => ctx.revert();
+  }, []);
+
   return (
-    <div className="relative w-full h-[600px] flex items-center justify-center">
+    <div ref={rootRef} className="relative w-full h-[600px] flex items-center justify-center">
       {/* Rocket SVG */}
-      <motion.svg
-        initial={{ y: 20, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 1, ease: 'easeOut' }}
-        className="relative z-10"
+      <svg
+        className="rocket-svg relative z-10"
         width="200"
         height="400"
         viewBox="0 0 200 400"
@@ -70,23 +122,12 @@ export function RocketAnimation() {
             <stop offset="100%" stopColor="#00d9ff" stopOpacity="0.2" />
           </radialGradient>
         </defs>
-      </motion.svg>
+      </svg>
 
       {/* Animated Flames */}
       <div className="absolute bottom-0 left-1/2 -translate-x-1/2 z-0">
         {/* Main flame */}
-        <motion.div
-          animate={{
-            scaleY: [1, 1.2, 1],
-            opacity: [0.8, 1, 0.8],
-          }}
-          transition={{
-            duration: 0.3,
-            repeat: Infinity,
-            ease: 'easeInOut',
-          }}
-          className="relative"
-        >
+        <div className="rocket-flame-main relative">
           <svg width="120" height="180" viewBox="0 0 120 180" fill="none">
             {/* Outer flame (orange) */}
             <path
@@ -119,22 +160,10 @@ export function RocketAnimation() {
               </linearGradient>
             </defs>
           </svg>
-        </motion.div>
+        </div>
 
         {/* Secondary flame flicker */}
-        <motion.div
-          className="absolute inset-0"
-          animate={{
-            scaleY: [1.1, 0.9, 1.1],
-            opacity: [0.6, 0.9, 0.6],
-          }}
-          transition={{
-            duration: 0.2,
-            repeat: Infinity,
-            ease: 'easeInOut',
-            delay: 0.1,
-          }}
-        >
+        <div className="rocket-flame-flicker absolute inset-0">
           <svg width="120" height="180" viewBox="0 0 120 180" fill="none">
             <path
               d="M60 10 Q45 45 48 85 Q52 125 60 170 Q68 125 72 85 Q75 45 60 10 Z"
@@ -148,7 +177,7 @@ export function RocketAnimation() {
               </linearGradient>
             </defs>
           </svg>
-        </motion.div>
+        </div>
       </div>
 
       {/* Glow effect behind rocket */}
@@ -157,22 +186,11 @@ export function RocketAnimation() {
       {/* Particle effects */}
       <div className="absolute bottom-20 left-1/2 -translate-x-1/2">
         {[...Array(6)].map((_, i) => (
-          <motion.div
+          <div
             key={i}
-            className="absolute w-1 h-1 bg-orange-400 rounded-full"
+            className="rocket-particle absolute w-1 h-1 bg-orange-400 rounded-full"
             style={{
               left: `${(i - 3) * 15}px`,
-            }}
-            animate={{
-              y: [0, 100],
-              opacity: [1, 0],
-              scale: [1, 0.5],
-            }}
-            transition={{
-              duration: 0.8,
-              repeat: Infinity,
-              delay: i * 0.1,
-              ease: 'easeOut',
             }}
           />
         ))}
