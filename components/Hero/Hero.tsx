@@ -43,7 +43,7 @@ export function Hero() {
   }, []);
 
   const handleCopyEmail = () => {
-    const email = "swe.shadman@gmail.com";
+    const email = "info@shadman.tech";
 
     if (navigator.clipboard && typeof navigator.clipboard.writeText === "function") {
       navigator.clipboard.writeText(email).then(
@@ -82,7 +82,7 @@ export function Hero() {
     <section
       id="home"
       ref={heroRef}
-      className="relative min-h-screen flex items-center overflow-hidden bg-black"
+      className="relative min-h-screen flex items-center overflow-hidden bg-black pt-24 md:pt-28 lg:pt-32"
     >
       <div className="hero-background absolute inset-0 bg-[linear-gradient(rgba(0,245,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(0,245,255,0.03)_1px,transparent_1px)] bg-[size:100px_100px] [mask-image:radial-gradient(ellipse_80%_50%_at_50%_50%,black,transparent)]" />
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-accent-cyan/10 rounded-full blur-[120px] pointer-events-none" />
@@ -123,7 +123,7 @@ export function Hero() {
                 >
                   <Copy className="w-3.5 h-3.5" />
                 </button>
-                <span className="font-mono select-all">swe.shadman@gmail.com</span>
+                <span className="font-mono select-all">info@shadman.tech</span>
                 {copied && (
                   <span className="text-[0.65rem] text-emerald-400">Copied</span>
                 )}

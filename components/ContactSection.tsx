@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, FormEvent } from 'react';
+import { useRef, useState, FormEvent } from 'react';
 import { Mail, Linkedin, Github } from 'lucide-react';
 import { useIsomorphicLayoutEffect } from '../hooks/useIsomorphicLayoutEffect';
 import { fadeInUp } from '../animations/fadeInUp';
@@ -8,6 +8,8 @@ import { gsap } from '../animations/gsapConfig';
 
 export function ContactSection() {
     const sectionRef = useRef<HTMLElement | null>(null);
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [statusMessage, setStatusMessage] = useState<string | null>(null);
 
     useIsomorphicLayoutEffect(() => {
         if (!sectionRef.current) return;
@@ -20,8 +22,41 @@ export function ContactSection() {
         return () => ctx.revert();
     }, []);
 
-    const handleSubmit = (e: FormEvent) => {
+    const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+
+        const form = e.currentTarget;
+        const formData = new FormData(form);
+
+        const name = (formData.get('name') as string) || '';
+        const email = (formData.get('email') as string) || '';
+        const message = (formData.get('message') as string) || '';
+
+        setIsSubmitting(true);
+        setStatusMessage(null);
+
+        try {
+            const res = await fetch('/api/contact', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ name, email, message }),
+            });
+
+            const data = await res.json();
+
+            if (!res.ok || !data.ok) {
+                throw new Error(data.error || 'Failed to send message');
+            }
+
+            setStatusMessage('Message sent successfully. I will get back to you soon.');
+            form.reset();
+        } catch (err) {
+            setStatusMessage('Unable to send message right now. Please try again later.');
+        } finally {
+            setIsSubmitting(false);
+        }
     };
 
     return (
@@ -44,7 +79,7 @@ export function ContactSection() {
 
                         <div className="space-y-3">
                             <a
-                                href="mailto:swe.shadman@gmail.com"
+                                href="mailto:info@shadman.tech"
                                 className="flex items-center justify-between rounded-2xl border border-neutral-800 bg-neutral-900/90 px-4 py-3 text-sm hover:border-neutral-600 transition-colors"
                             >
                                 <div className="flex items-center gap-3">
@@ -56,7 +91,7 @@ export function ContactSection() {
                                     </span>
                                 </div>
                                 <span className="text-xs md:text-sm text-neutral-200">
-                                    swe.shadman@gmail.com
+                                    info@shadman.tech
                                 </span>
                             </a>
 
@@ -109,6 +144,7 @@ export function ContactSection() {
                                     </label>
                                     <input
                                         type="text"
+                                        name="name"
                                         className="w-full rounded-xl border border-neutral-800 bg-black px-3 py-2 text-sm outline-none focus:border-neutral-500"
                                         placeholder="John Doe"
                                     />
@@ -119,6 +155,7 @@ export function ContactSection() {
                                     </label>
                                     <input
                                         type="email"
+                                        name="email"
                                         className="w-full rounded-xl border border-neutral-800 bg-black px-3 py-2 text-sm outline-none focus:border-neutral-500"
                                         placeholder="john@example.com"
                                     />
@@ -130,6 +167,7 @@ export function ContactSection() {
                                     Message
                                 </label>
                                 <textarea
+                                    name="message"
                                     className="w-full min-h-[120px] rounded-xl border border-neutral-800 bg-black px-3 py-2 text-sm resize-none outline-none focus:border-neutral-500"
                                     placeholder="Tell me about your project..."
                                 />
@@ -137,10 +175,14 @@ export function ContactSection() {
 
                             <button
                                 type="submit"
-                                className="mt-2 inline-flex w-full items-center justify-center rounded-xl border border-neutral-700 bg-gradient-to-r from-neutral-100 via-neutral-300 to-neutral-100 bg-[length:200%_100%] px-4 py-2 text-xs md:text-sm font-semibold text-black"
+                                disabled={isSubmitting}
+                                className="mt-2 inline-flex w-full items-center justify-center rounded-xl border border-neutral-700 bg-gradient-to-r from-neutral-100 via-neutral-300 to-neutral-100 bg-[length:200%_100%] px-4 py-2 text-xs md:text-sm font-semibold text-black disabled:opacity-70 disabled:cursor-not-allowed"
                             >
-                                Send a message
+                                {isSubmitting ? 'Sending…' : 'Send a message'}
                             </button>
+                            {statusMessage && (
+                                <p className="mt-2 text-[0.7rem] text-neutral-400">{statusMessage}</p>
+                            )}
                         </form>
                     </div>
                 </div>

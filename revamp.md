@@ -289,7 +289,7 @@ Tasks:
 
 **Content**
 - Clear CTA header.
-- Email: `swe.shadman@gmail.com` (click-to-copy / mailto).
+- Email: `info@shadman.tech` (click-to-copy / mailto).
 - Social links: GitHub, LinkedIn, maybe X.
 
 **Animations**

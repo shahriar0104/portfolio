@@ -183,7 +183,7 @@ Feel free to fork this project and customize it for your own portfolio. If you f
 
 ## 📞 Contact
 
-- **Email**: swe.shadman@gmail.com
+- **Email**: info@shadman.tech
 - **Phone**: +8801965392623
 - **LinkedIn**: https://www.linkedin.com/in/swe-shadman/
 - **GitHub**: https://github.com/shahriar0104
