@@ -27,6 +27,7 @@ import {
   SiThymeleaf,
   SiLaravel,
   SiFastapi,
+  SiAmazonwebservices,
 } from "react-icons/si";
 
 const CurlyBracesIcon: IconType = ({ color, className }) => (
@@ -109,6 +110,7 @@ const map: Record<string, TechIconMeta> = {
   "BRN Integration": { icon: BrnIcon, color: "#FACC15" },
   "RAG Pipeline": { icon: RagIcon, color: "#38BDF8" },
   LLMs: { icon: LlmIcon, color: "#F97316" },
+  AWS: { icon: SiAmazonwebservices, color: "#FF9900" },
   "3rd Prty APIs": { icon: CurlyBracesIcon, color: "#F97316" },
 };
 

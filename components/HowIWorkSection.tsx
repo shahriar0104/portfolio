@@ -42,12 +42,27 @@ export function HowIWorkSection() {
       staggerReveal(".how-card", { delay: 0.2, y: 30 });
 
       if (marqueeRef.current) {
-        gsap.to(marqueeRef.current, {
-          xPercent: -50,
-          repeat: -1,
-          duration: 30,
-          ease: "none",
-        });
+        const track = marqueeRef.current;
+        const container = track.parentElement;
+
+        if (container) {
+          const getDistance = () => {
+            const totalWidth = track.scrollWidth;
+            const visibleWidth = container.offsetWidth;
+            return Math.max(0, totalWidth - visibleWidth);
+          };
+
+          gsap.fromTo(
+            track,
+            { x: 0 },
+            {
+              x: () => -getDistance(),
+              repeat: -1,
+              duration: 80,
+              ease: "none",
+            }
+          );
+        }
       }
     }, sectionRef);
 
@@ -174,7 +189,7 @@ export function HowIWorkSection() {
         {/* Row 2: Results / Secure / Fast */}
         <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,2fr)_minmax(0,1.4fr)] gap-6 md:gap-8">
           {/* Results card */}
-          <div className="how-card rounded-3xl border border-neutral-800 bg-neutral-900/80 px-6 py-6 md:px-7 md:py-7 flex items-center gap-6">
+          <div className="how-card rounded-3xl border border-neutral-800 bg-neutral-900/80 px-6 py-6 md:px-7 md:py-7 flex flex-col md:flex-row items-start md:items-center gap-6">
             <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-b from-sky-500/80 to-sky-300/80">
               <BarChart2 className="w-7 h-7 text-black/90" />
             </div>

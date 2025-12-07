@@ -175,7 +175,7 @@ export function AboutSection() {
             {/* Pinned vertical experience rail */}
             <div
               ref={experienceRailRef}
-              className="about-card h-[440px] rounded-[2rem] border border-neutral-800 bg-neutral-900/90 px-4 py-5 flex flex-col gap-4 overflow-hidden"
+              className="about-card rounded-[2rem] border border-neutral-800 bg-neutral-900/90 px-4 py-5 flex flex-col gap-4 overflow-hidden h-auto md:h-[420px] lg:h-[440px]"
             >
               <div className="flex flex-col items-start gap-2">
                 <span className="text-xs uppercase tracking-[0.3em] text-neutral-400">
@@ -216,7 +216,7 @@ export function AboutSection() {
             </div>
 
             {/* About me card with image left and info right */}
-            <div className="about-card h-[440px] rounded-[2.4rem] border border-neutral-800 bg-neutral-900/95 px-6 py-7 flex flex-col gap-5">
+            <div className="about-card rounded-[2.4rem] border border-neutral-800 bg-neutral-900/95 px-6 py-7 flex flex-col gap-5 h-auto md:h-[420px] lg:h-[440px]">
               <div className="grid grid-cols-1 md:grid-cols-[minmax(0,1.1fr)_minmax(0,1.5fr)] gap-5 items-center">
                 <div className="relative w-full max-w-[260px] mx-auto aspect-[3/4] rounded-[1.75rem] bg-neutral-800 overflow-hidden">
                   <Image
