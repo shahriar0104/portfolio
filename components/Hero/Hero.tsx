@@ -98,10 +98,10 @@ export function Hero() {
                 <RocketAnimation />
               </div>
             </div>
-            <h1 className="hero-name relative z-10 text-4xl sm:text-5xl md:text-6xl lg:text-[4.8rem] xl:text-[5.4rem] font-bold tracking-[0.12em] text-white/80 text-center leading-[0.9] uppercase [font-family:var(--font-orbitron)]">
-              E2E COMPLEXITY
-              <br className="hidden sm:block" />
-              SIMPLIFIER
+            <h1 className="hero-name relative z-10 text-3xl sm:text-5xl md:text-6xl lg:text-[4.8rem] xl:text-[5.4rem] font-bold tracking-[0.12em] text-white/80 text-center leading-[0.9] uppercase [font-family:var(--font-orbitron)]">
+              <span className="block sm:inline">{"E2E\u00A0"}</span>
+              <span className="block sm:inline sm:ml-2">COMPLEXITY</span>
+              <span className="block">SIMPLIFIER</span>
             </h1>
           </div>
 

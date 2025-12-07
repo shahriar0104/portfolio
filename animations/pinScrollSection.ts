@@ -14,7 +14,7 @@ export function pinScrollSection(
 ) {
   if (!section) return;
 
-  const { start = "top top", end = "+=100%", scrub = true } = options;
+  const { start = "center center", end = "+=100%", scrub = true } = options;
 
   registerGsap();
 

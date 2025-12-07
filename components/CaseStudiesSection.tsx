@@ -227,11 +227,11 @@ export function CaseStudiesSection() {
 
           const tl = gsap.timeline({
             scrollTrigger: {
-              trigger: caseEl,
+              trigger: visual,
               start: "center center",
               end: "+=" + steps * 90 + "%",
               scrub: true,
-              pin: true,
+              pin: caseEl,
               anticipatePin: 1,
             },
           });
@@ -343,11 +343,11 @@ export function CaseStudiesSection() {
 
           const tl = gsap.timeline({
             scrollTrigger: {
-              trigger: caseEl,
+              trigger: visual,
               start: "center center",
               end: "+=" + steps * 100 + "%",
               scrub: true,
-              pin: true,
+              pin: caseEl,
               anticipatePin: 1,
             },
           });
@@ -414,11 +414,11 @@ export function CaseStudiesSection() {
         } else {
           const tl = gsap.timeline({
             scrollTrigger: {
-              trigger: caseEl,
+              trigger: visual,
               start: "center center",
               end: "+=" + slides.length * 150 + "%",
               scrub: true,
-              pin: true,
+              pin: caseEl,
               anticipatePin: 1,
             },
           });
@@ -471,7 +471,11 @@ export function CaseStudiesSection() {
             data-case-id={study.id}
             className="case-main mb-16 last:mb-0 grid grid-cols-1 lg:grid-cols-[minmax(0,1.7fr)_minmax(0,1.1fr)] gap-8 items-start"
           >
-            <div className="rounded-3xl border border-neutral-800 bg-neutral-900/80 overflow-hidden aspect-[16/9]">
+            <div
+              className={`rounded-3xl border border-neutral-800 bg-neutral-900/80 overflow-hidden lg:self-center ${
+                study.id === "ieims" ? "aspect-square lg:aspect-[16/9]" : "aspect-[16/9]"
+              }`}
+            >
               <div className="case-visual relative w-full h-full bg-gradient-to-br from-neutral-800 via-neutral-900 to-black">
                 {study.id === "ieims" ? (
                   <IeimsFlowVisual />
