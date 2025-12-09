@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useRef } from "react";
+import anime from "animejs/lib/anime.es.js";
 import { useIsomorphicLayoutEffect } from "../hooks/useIsomorphicLayoutEffect";
 import { gsap, registerGsap } from "../animations/gsapConfig";
 import { fadeInUp } from "../animations/fadeInUp";
@@ -93,11 +94,48 @@ const caseStudies = [
 ];
 
 function IeimsFlowVisual() {
+  const rootRef = useRef<HTMLDivElement | null>(null);
+
+  useIsomorphicLayoutEffect(() => {
+    if (!rootRef.current) return;
+
+    const glow = rootRef.current.querySelector<HTMLElement>(".ieims-glow-bg");
+    const ring = rootRef.current.querySelector<HTMLElement>(".ieims-glow-ring");
+
+    if (!glow || !ring) return;
+
+    const glowAnim = anime({
+      targets: glow,
+      scale: [0.96, 1.04],
+      opacity: [0.8, 1],
+      easing: "easeInOutSine",
+      duration: 2600,
+      direction: "alternate",
+      loop: true,
+    });
+
+    const ringAnim = anime({
+      targets: ring,
+      borderColor: ["rgba(34,211,238,0.25)", "rgba(56,189,248,0.9)"],
+      easing: "easeInOutSine",
+      duration: 2800,
+      direction: "alternate",
+      loop: true,
+    });
+
+    return () => {
+      glowAnim.pause();
+      ringAnim.pause();
+      anime.remove(glow);
+      anime.remove(ring);
+    };
+  }, []);
+
   return (
-    <div className="absolute inset-0 flex items-center justify-center">
+    <div ref={rootRef} className="absolute inset-0 flex items-center justify-center">
       <div className="relative w-[min(360px,100%)] aspect-square">
-        <div className="absolute inset-[-15%] rounded-full bg-[radial-gradient(circle_at_center,rgba(45,212,191,0.22),transparent_65%)]" />
-        <div className="absolute inset-[18%] rounded-full border border-cyan-500/25" />
+        <div className="ieims-glow-bg absolute inset-[-15%] rounded-full bg-[radial-gradient(circle_at_center,rgba(45,212,191,0.22),transparent_65%)]" />
+        <div className="ieims-glow-ring absolute inset-[18%] rounded-full border border-cyan-500/25" />
 
         {/* CDR - Straight line upward - from center to CDR module */}
         <div className="ieims-link ieims-link-cdr absolute left-1/2 top-[3%] -translate-x-1/2 h-[47%] w-[2px] bg-gradient-to-b from-cyan-400/90 via-cyan-400/50 to-transparent" />
@@ -207,11 +245,12 @@ export function CaseStudiesSection() {
             "cdr" | "reg" | "ffu" | "pmc" | "eap",
             { x: number; y: number }
           > = {
-            cdr: { x: 0, y: -80 },
-            reg: { x: 80, y: 0 },
+            // Tune these so sparks travel from the master node all the way to each pill
+            cdr: { x: 0, y: -140 },
+            reg: { x: 150, y: 0 },
             ffu: { x: 60, y: 70 },
             pmc: { x: -60, y: 70 },
-            eap: { x: -80, y: 0 },
+            eap: { x: -150, y: 0 },
           };
 
           gsap.set(nodes, { opacity: 0.35, scale: 0.92 });
