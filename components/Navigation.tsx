@@ -35,6 +35,14 @@ export function Navigation() {
         }
       }
 
+      const requestServiceEl = document.getElementById('request-service');
+      if (requestServiceEl) {
+        const rect = requestServiceEl.getBoundingClientRect();
+        if (rect.top <= viewportCenter && rect.bottom >= viewportCenter) {
+          currentId = 'how-i-work';
+        }
+      }
+
       setActiveId(currentId);
     };
 
